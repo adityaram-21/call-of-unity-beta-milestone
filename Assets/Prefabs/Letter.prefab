@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7239779629535637765}
   - component: {fileID: 2058024923256802040}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BackGround
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: 3813898194260067370}
   - component: {fileID: 4312310132439080419}
   - component: {fileID: 2048013390739867552}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LetterText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -199,9 +199,9 @@ GameObject:
   - component: {fileID: 7014400698010619437}
   - component: {fileID: 6711567916563487506}
   - component: {fileID: 5771045448885219019}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Letter
-  m_TagString: Untagged
+  m_TagString: Letter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
