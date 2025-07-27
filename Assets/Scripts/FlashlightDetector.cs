@@ -1,5 +1,6 @@
 using UnityEngine;
-using TMPro; 
+using TMPro;
+using System.Collections;
 
 
 public class FlashlightDetector : MonoBehaviour
@@ -26,6 +27,12 @@ public class FlashlightDetector : MonoBehaviour
     public GameObject flashlight; // assign Light2D here
     public TextMeshProUGUI alarmLogText; // assign your AlarmLog TextMeshProUGUI here
 
+    [Header("Alarm Timer Settings")]
+    public float alarmCountdownTime = 3f;
+    private float alarmTimer = 0f;
+    private Coroutine blinkCoroutine;
+    private bool isBlinking = false;
+
     // private state
     private bool isAlarmOn = false;
 
@@ -41,6 +48,32 @@ public class FlashlightDetector : MonoBehaviour
     void Update()
     {
         DetectLight();
+
+        if (isAlarmOn)
+        {
+            alarmTimer -= Time.deltaTime;
+
+            if (alarmLogText != null)
+            {
+                alarmLogText.text = "Flashlight Detected! Alarms go off in " + Mathf.Ceil(alarmTimer) + "s!";
+            }
+
+            if (alarmTimer <= 0f)
+            {
+                // Game over logic here
+                ObjectClickChecker clickChecker = FindObjectOfType<ObjectClickChecker>();
+                if (clickChecker != null)
+                {
+                    StopAlarm();
+                    isAlarmOn = false; // reset alarm state
+                    clickChecker.GameOver("Flashlight detected! Game over.");
+                }
+                else
+                {
+                    Debug.LogWarning("ObjectClickChecker not found in scene!");
+                }
+            }
+        }
     }
 
     private void DetectLight()
@@ -110,8 +143,27 @@ public class FlashlightDetector : MonoBehaviour
 
         if (alarmLogText != null)
         {
-            alarmLogText.text = "Flashlight Detected!";
+            alarmLogText.text = "Flashlight Detected! Alarms go off in " + alarmCountdownTime + " seconds!";
             alarmLogText.enabled = true;
+        }
+
+        alarmTimer = alarmCountdownTime;
+        if (!isBlinking)
+        {
+            isBlinking = true;
+            blinkCoroutine = StartCoroutine(BlinkAlarmText());
+        }
+    }
+
+    private IEnumerator BlinkAlarmText()
+    {
+        while (true)
+        {
+            if (alarmLogText != null)
+            {
+                alarmLogText.enabled = !alarmLogText.enabled; // toggle visibility
+            }
+            yield return new WaitForSeconds(0.5f);
         }
     }
 
@@ -123,6 +175,13 @@ public class FlashlightDetector : MonoBehaviour
         {
             alarmLogText.enabled = false;
         }
+
+        if (isBlinking && blinkCoroutine != null)
+        {
+            StopCoroutine(blinkCoroutine);
+            isBlinking = false;
+        }
+        alarmTimer = 0f; // reset timer
     }
 
     private void OnWeakLightVisible(GameObject visibleObject)

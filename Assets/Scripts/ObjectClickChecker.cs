@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class ObjectClickChecker : MonoBehaviour
 {
@@ -18,10 +19,9 @@ public class ObjectClickChecker : MonoBehaviour
 
     void OnMouseDown()
     {
-        //Prevent clicking before solving the clue
         if (!LetterRack.clueSolved)
         {
-            Debug.Log("❌ You must solve the clue first before clicking objects.");
+            Debug.Log("You must solve the clue first before clicking objects.");
             return;
         }
 
@@ -38,21 +38,32 @@ public class ObjectClickChecker : MonoBehaviour
 
         if (clickedName == targetName)
         {
-            Debug.Log("✅ Correct object clicked! You win.");
+            Debug.Log("Correct object clicked! You win.");
             if (winPopup != null)
             {
                 winPopup.SetActive(true);
-                Time.timeScale = 0f;  //Freeze game
+                Time.timeScale = 0f;
             }
         }
         else
         {
-            Debug.Log("❌ Wrong object clicked. Game Over.");
-            if (losePopup != null)
+            Debug.Log("Wrong object clicked. Game Over.");
+            GameOver("Wrong target. Mission compromised!!");
+        }
+    }
+
+    public void GameOver(string message)
+    {
+        Debug.Log(message);
+        if (losePopup != null)
+        {
+            TMP_Text loseText = losePopup.GetComponentInChildren<TMP_Text>();
+            if (loseText != null)
             {
-                losePopup.SetActive(true);
-                Time.timeScale = 0f;  //Freeze game
+                loseText.text = message;
             }
+            losePopup.SetActive(true);
+            Time.timeScale = 0f;
         }
     }
 }

@@ -6,6 +6,7 @@ using TMPro;
 public class LetterRack : MonoBehaviour
 {
     [SerializeField] private RectTransform slotTemplate;
+    [SerializeField] private Transform slotContainer;
     [SerializeField] private GameObject successPopup;
 
     private List<Slot> slots = new();
@@ -16,6 +17,7 @@ public class LetterRack : MonoBehaviour
     private void Start()
     {
         clueSolved = false;
+        successPopup.SetActive(false);
 
         if (wordManager == null)
         {
@@ -39,7 +41,7 @@ public class LetterRack : MonoBehaviour
 
         for (int i = 0; i < wordLength; i++)
         {
-            var slot = Instantiate(slotTemplate, transform);
+            var slot = Instantiate(slotTemplate, slotContainer);
             slot.gameObject.SetActive(true);
 
             var text = slot.GetComponentInChildren<TextMeshProUGUI>();
@@ -130,6 +132,11 @@ public class LetterRack : MonoBehaviour
         popup.SetActive(true);
         yield return new WaitForSeconds(2.5f);
         popup.SetActive(false);
+    }
+
+    public void HidePopUp()
+    {
+        successPopup.SetActive(false);
     }
 
     private class Slot
