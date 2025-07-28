@@ -1,10 +1,12 @@
 using UnityEngine;
 using TMPro;
+using System.Collections;
 
 public class ObjectClickChecker : MonoBehaviour
 {
     public GameObject winPopup;
     public GameObject losePopup;
+    public GameObject doorToRemove;
 
     private WordDictionaryManager clueManager;
 
@@ -15,6 +17,9 @@ public class ObjectClickChecker : MonoBehaviour
         {
             Debug.LogError("WordDictionaryManager not found in scene!");
         }
+
+        if (winPopup != null) winPopup.SetActive(false);
+        if (losePopup != null) losePopup.SetActive(false);
     }
 
     void OnMouseDown()
@@ -39,11 +44,7 @@ public class ObjectClickChecker : MonoBehaviour
         if (clickedName == targetName)
         {
             Debug.Log("Correct object clicked! You win.");
-            if (winPopup != null)
-            {
-                winPopup.SetActive(true);
-                Time.timeScale = 0f;
-            }
+            StartCoroutine(HandleWin());
         }
         else
         {
@@ -52,9 +53,31 @@ public class ObjectClickChecker : MonoBehaviour
         }
     }
 
+    IEnumerator HandleWin()
+    {
+        if (winPopup != null)
+        {
+            winPopup.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(3f);
+
+        if (winPopup != null)
+        {
+            winPopup.SetActive(false);
+        }
+
+        if (doorToRemove != null)
+        {
+            Destroy(doorToRemove);
+            Debug.Log("🚪 Door removed. Path is now open.");
+        }
+    }
+
     public void GameOver(string message)
     {
         Debug.Log(message);
+
         if (losePopup != null)
         {
             TMP_Text loseText = losePopup.GetComponentInChildren<TMP_Text>();
@@ -62,8 +85,10 @@ public class ObjectClickChecker : MonoBehaviour
             {
                 loseText.text = message;
             }
+
             losePopup.SetActive(true);
-            Time.timeScale = 0f;
         }
+
+        Time.timeScale = 0f; // freeze game on loss
     }
 }
