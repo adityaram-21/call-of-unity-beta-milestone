@@ -10,6 +10,8 @@ public class ObjectClickChecker : MonoBehaviour
 
     private WordDictionaryManager clueManager;
     private GameManager gameManager;
+    private int timeTakenLevel1 = 0;
+    private int timeTakenLevel2 = 0;
 
     void Start()
     {
@@ -49,7 +51,17 @@ public class ObjectClickChecker : MonoBehaviour
         {
             Debug.Log("Correct object clicked! You win.");
             TimerController timerController = FindObjectOfType<TimerController>();
-            GoogleSheetLogger.LogEvent("Level 1 Completed", $"{300f - timerController.timeRemaining}");
+            if (gameManager != null && gameManager.currentLevel == 1)
+            {
+                timeTakenLevel1 = (int)(300f - timerController.timeRemaining);
+                GoogleSheetLogger.LogEvent("Level 1 Completed", $"{timeTakenLevel1}");
+            }
+            else
+            if (gameManager != null && gameManager.currentLevel == 2)
+            {
+                timeTakenLevel2 = (int)(300f - timerController.timeRemaining - timeTakenLevel1);
+                GoogleSheetLogger.LogEvent("Level 2 Completed", $"{timeTakenLevel2}");
+            }
             StartCoroutine(HandleWin());
         }
         else
