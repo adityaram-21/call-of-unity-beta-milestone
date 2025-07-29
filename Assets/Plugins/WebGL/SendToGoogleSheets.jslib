@@ -1,4 +1,4 @@
-mergeInto(LibraryManager.library {
+mergeInto(LibraryManager.library, {
     SendEventToGoogleSheet: function(eventPtr, detailsPtr) {
         var eventName = UTF8ToString(eventPtr);
         var details = UTF8ToString(detailsPtr);
