@@ -61,12 +61,12 @@ public class FlashlightDetector : MonoBehaviour
             if (alarmTimer <= 0f)
             {
                 // Game over logic here
-                ObjectClickChecker clickChecker = FindObjectOfType<ObjectClickChecker>();
-                if (clickChecker != null)
+                GameManager gameManager = FindObjectOfType<GameManager>();
+                if (gameManager != null)
                 {
                     StopAlarm();
                     isAlarmOn = false; // reset alarm state
-                    clickChecker.GameOver("Flashlight detected! Game over.");
+                    gameManager.GameOver("Flashlight detected! Game over.");
                 }
                 else
                 {

@@ -9,13 +9,17 @@ public class ObjectClickChecker : MonoBehaviour
     public GameObject doorToRemove;
 
     private WordDictionaryManager clueManager;
+    private GameManager gameManager;
 
     void Start()
     {
         clueManager = FindObjectOfType<WordDictionaryManager>();
-        if (clueManager == null)
+        gameManager = FindObjectOfType<GameManager>();
+
+        if (clueManager == null || gameManager == null)
         {
-            Debug.LogError("WordDictionaryManager not found in scene!");
+            Debug.LogError("ClueManager or GameManager not found in scene!");
+            return;
         }
 
         if (winPopup != null) winPopup.SetActive(false);
@@ -44,12 +48,14 @@ public class ObjectClickChecker : MonoBehaviour
         if (clickedName == targetName)
         {
             Debug.Log("Correct object clicked! You win.");
+            TimerController timerController = FindObjectOfType<TimerController>();
+            GoogleSheetLogger.LogEvent("Level 1 Completed", $"{300f - timerController.timeRemaining}");
             StartCoroutine(HandleWin());
         }
         else
         {
             Debug.Log("Wrong object clicked. Game Over.");
-            GameOver("Wrong target. Mission compromised!!");
+            gameManager.GameOver("Wrong target. Mission compromised!!");
         }
     }
 
@@ -70,25 +76,7 @@ public class ObjectClickChecker : MonoBehaviour
         if (doorToRemove != null)
         {
             Destroy(doorToRemove);
-            Debug.Log("🚪 Door removed. Path is now open.");
+            Debug.Log("Door removed. Path is now open.");
         }
-    }
-
-    public void GameOver(string message)
-    {
-        Debug.Log(message);
-
-        if (losePopup != null)
-        {
-            TMP_Text loseText = losePopup.GetComponentInChildren<TMP_Text>();
-            if (loseText != null)
-            {
-                loseText.text = message;
-            }
-
-            losePopup.SetActive(true);
-        }
-
-        Time.timeScale = 0f; // freeze game on loss
     }
 }

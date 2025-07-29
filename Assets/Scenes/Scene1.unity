@@ -3778,6 +3778,7 @@ MonoBehaviour:
   startButton: {fileID: 1986706499}
   pauseButton: {fileID: 1424118749}
   resumeButton: {fileID: 1152974978}
+  losePopup: {fileID: 486566762}
 --- !u!4 &384770750
 Transform:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
     public Button startButton;
     public Button pauseButton;
     public Button resumeButton;
+    public GameObject losePopup;
 
     void Start()
     {
@@ -38,5 +40,23 @@ public class GameManager : MonoBehaviour
     {
         pausePanel.SetActive(false);
         Time.timeScale = 1f;
+    }
+
+    public void GameOver(string message)
+    {
+        Debug.Log(message);
+
+        if (losePopup != null)
+        {
+            TMP_Text loseText = losePopup.GetComponentInChildren<TMP_Text>();
+            if (loseText != null)
+            {
+                loseText.text = message;
+            }
+            
+            pauseButton.gameObject.SetActive(false);
+            losePopup.SetActive(true);
+            Time.timeScale = 0f; // freeze game on loss
+        }
     }
 }

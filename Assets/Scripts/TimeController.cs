@@ -41,14 +41,14 @@ public class TimerController : MonoBehaviour
     void TimerEnded()
     {
         // Handle timer end logic here
-        ObjectClickChecker clickChecker = FindObjectOfType<ObjectClickChecker>();
-        if (clickChecker != null)
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        if (gameManager != null)
         {
-            clickChecker.GameOver("Time's up! Mission failed.");
+            gameManager.GameOver("Time's up! Mission failed.");
         }
         else
         {
-            Debug.LogWarning("ObjectClickChecker not found in scene!");
+            Debug.LogWarning("GameManager not found in scene!");
         }
     }
 }
