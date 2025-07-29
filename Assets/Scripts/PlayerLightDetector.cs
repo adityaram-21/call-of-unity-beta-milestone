@@ -3,18 +3,16 @@ using TMPro;
 
 public class PlayerLightDetector : MonoBehaviour
 {
-    public GameObject gameOverPopup;  // Assign in Inspector
-
     void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("EnemyLight"))  // Light should be tagged properly
         {
-            Debug.Log("🚨 Player entered the red light. Game Over!");
+            Debug.Log("Player entered the red light. Game Over!");
 
-            if (gameOverPopup != null)
+            GameManager gameManager = FindObjectOfType<GameManager>();
+            if (gameManager != null)
             {
-                gameOverPopup.SetActive(true);
-                Time.timeScale = 0f;  // Freeze the game
+                gameManager.GameOver("Player got caught by security!");
             }
         }
     }
