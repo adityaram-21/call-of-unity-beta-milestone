@@ -21,7 +21,7 @@ public class SecurityGuardPatrol : MonoBehaviour
             return;
         }
 
-        // ✅ Start exactly at leftPoint
+        // Start exactly at leftPoint
         transform.position = leftPoint.position;
         Debug.Log("Guard starts at: " + transform.position);
     }

@@ -64,7 +64,7 @@ public class PlayerController : MonoBehaviour
 
 
         // Flashlight Switch
-        if (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Space)) // Right click or Space
+        if (Time.timeScale > 0 && (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Space))) // Right click or Space to toggle flashlight
         {
             flashlightOn = !flashlightOn;
             if (flashlight != null)
