@@ -12,7 +12,7 @@ public class PlayerLightDetector : MonoBehaviour
             GameManager gameManager = FindObjectOfType<GameManager>();
             if (gameManager != null)
             {
-                gameManager.GameOver("Player got caught by security!");
+                gameManager.GameOver("Caught by security. Mission compromised!!");
             }
         }
     }
