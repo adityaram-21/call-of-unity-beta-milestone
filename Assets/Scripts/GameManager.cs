@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
     public Button pauseButton;
     public Button resumeButton;
     public GameObject losePopup;
+    public GameObject winPopup;
+    public int currentLevel = 1;
 
     void Start()
     {
@@ -42,6 +44,28 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
+    public void WinGame(string message)
+    {
+        Debug.Log(message);
+
+        if (winPopup != null)
+        {
+            TMP_Text winText = winPopup.GetComponentInChildren<TMP_Text>();
+            if (winText != null)
+            {
+                winText.text = message;
+            }
+            if (currentLevel == 2)
+            {
+                winText.text = "Congratulations! You have completed the game!";
+                pauseButton.gameObject.SetActive(false);
+                winPopup.SetActive(true);
+                Time.timeScale = 0f; // freeze game on win
+            }
+            winPopup.SetActive(true);
+        }
+    }
+
     public void GameOver(string message)
     {
         Debug.Log(message);
@@ -53,10 +77,24 @@ public class GameManager : MonoBehaviour
             {
                 loseText.text = message;
             }
-            
+
             pauseButton.gameObject.SetActive(false);
             losePopup.SetActive(true);
             Time.timeScale = 0f; // freeze game on loss
+        }
+    }
+
+    public void LoadNextLevel()
+    {
+        Debug.Log("Loading next level...");
+        RandomLetterSpawner spawner = FindObjectOfType<RandomLetterSpawner>();
+        LetterRack letterRack = FindObjectOfType<LetterRack>();
+        if (spawner != null && letterRack != null)
+        {
+            currentLevel++;
+            spawner.SpawnCluesForLevel2(); // Call method to spawn clues for level
+            letterRack.ClearRack(); // Clear the letter rack for the new level
+            letterRack.SetupRack(); // Setup the rack with new clues
         }
     }
 }

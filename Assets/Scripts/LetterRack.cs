@@ -28,7 +28,22 @@ public class LetterRack : MonoBehaviour
                 return;
             }
         }
+        SetupRack();
+    }
 
+    public void ClearRack()
+    {
+        foreach (var slot in slots)
+        {
+            slot.Clear();
+            slot.DestroyUI();
+        }
+        slots.Clear();
+        clueSolved = false;
+    }
+
+    public void SetupRack()
+    {
         clueWord = wordManager.targetClueWord;
 
         if (string.IsNullOrEmpty(clueWord))
@@ -143,7 +158,7 @@ public class LetterRack : MonoBehaviour
     {
         public char Letter { get; private set; }
         public Letter Source { get; private set; }
-        private TextMeshProUGUI label;
+        public TextMeshProUGUI label;
 
         public Slot(TextMeshProUGUI l)
         {
@@ -174,6 +189,12 @@ public class LetterRack : MonoBehaviour
         {
             if (Source != null)
                 Source.ReturnToWorld();
+        }
+
+        public void DestroyUI()
+        {
+            if (label != null)
+                GameObject.Destroy(label.transform.parent.gameObject);
         }
     }
 }
