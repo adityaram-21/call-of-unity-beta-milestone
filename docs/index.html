@@ -7,21 +7,21 @@
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
     <script>
-      window.sendToGoogleSheet = function(eventName, details) {
+        window.sendToGoogleSheet = function(eventName, details) {
         fetch("https://script.google.com/macros/s/AKfycbyMRnH8rWbRe-D3mgUoPDHsnKfJ6nj9bDsowVLQosLJuuqIMDJXaego_qw4GHS645I0cw/exec", {
-          method: "POST",
-          body: JSON.stringify({
+            method: "POST",
+            body: JSON.stringify({
             eventName: eventName,
             details: details
-          }),
-          headers: {
+            }),
+            headers: {
             "Content-Type": "text/plain"
-          }
+            }
         })
         .then(res => res.text())
         .then(res => console.log("Sheet response:", res))
         .catch(err => console.error("Sheet error:", err));
-      };
+        };
     </script>
   </head>
   <body>
