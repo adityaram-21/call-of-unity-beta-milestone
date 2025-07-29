@@ -8,6 +8,7 @@ TagManager:
   - Lamp
   - Tub
   - Letter
+  - EnemyLight
   layers:
   - Default
   - TransparentFX
