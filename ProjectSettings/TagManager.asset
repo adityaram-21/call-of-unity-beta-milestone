@@ -9,6 +9,9 @@ TagManager:
   - Tub
   - Letter
   - EnemyLight
+  - Drawer
+  - Desk
+  - Clock
   layers:
   - Default
   - TransparentFX

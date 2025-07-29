@@ -7,6 +7,7 @@ public class RandomLetterSpawner : MonoBehaviour
     [Header("References")]
     public Grid grid;
     public Tilemap groundTilemap;
+    public Tilemap groundTilemapKitchen;
     public Tilemap wallTilemap;
     public Tilemap decorationTilemap;
     public WordDictionaryManager wordDictionaryManager;
@@ -38,33 +39,43 @@ public class RandomLetterSpawner : MonoBehaviour
 
         GenerateValidSpawnPoints();
 
-        wordDictionaryManager.SelectRandomClue();  // Pick a clue for this level
+        wordDictionaryManager.SelectRandomClue();  // Pick a clue for level 1
         SpawnLettersForClue();
     }
 
-    void GenerateValidSpawnPoints()
+    public void SpawnCluesForLevel2()
+    {
+        GenerateValidSpawnPoints(groundTilemapKitchen);
+        wordDictionaryManager.SelectRandomClue();  // Pick a clue for level 2
+        SpawnLettersForClue();
+    }
+
+    void GenerateValidSpawnPoints(Tilemap tilemap = null)
     {
         validSpawnPoints.Clear();
 
-        BoundsInt bounds = groundTilemap.cellBounds;
-
+        Tilemap groundToCheck = tilemap != null ? tilemap : groundTilemap;
+        BoundsInt bounds = groundToCheck.cellBounds;
+        Debug.Log($"Checking tilemap: {groundToCheck.name}, bounds: {bounds}");
+        int tileCount = 0;
         for (int x = bounds.xMin; x <= bounds.xMax; x++)
         {
             for (int y = bounds.yMin; y <= bounds.yMax; y++)
             {
                 Vector3Int cell = new Vector3Int(x, y, 0);
 
-                if (!groundTilemap.HasTile(cell))
+                if (!groundToCheck.HasTile(cell))  // use groundToCheck here
                     continue;
 
                 if (wallTilemap.HasTile(cell) || decorationTilemap.HasTile(cell))
                     continue;
 
-                // Center of cell
                 Vector3 worldPos = grid.GetCellCenterWorld(cell);
                 validSpawnPoints.Add(worldPos);
+                tileCount++;
             }
         }
+        Debug.Log("Tile count in valid spawn points: " + tileCount);
 
         if (validSpawnPoints.Count == 0)
         {
@@ -116,6 +127,7 @@ public class RandomLetterSpawner : MonoBehaviour
             Vector3 spawnPos = validSpawnPoints[spawnIndex];
             validSpawnPoints.RemoveAt(spawnIndex);  // Prevent reuse of same spot
 
+            spawnPos.z = -1f;
             GameObject letterObj = Instantiate(letterPrefab, letterParent);
             letterObj.transform.position = spawnPos; // Set world position manually
             letterObj.GetComponent<Letter>().SetLetter(lettersToSpawn[i]);

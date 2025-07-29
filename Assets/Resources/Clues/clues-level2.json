@@ -1,0 +1,7 @@
+{
+    "clueMappingsList": [
+      { "objectName": "Desk", "clueWords": ["WORK", "STUDY", "PAPER"] },
+      { "objectName": "Drawer", "clueWords": ["HIDE", "SECRET", "STASH"] },
+      { "objectName": "Clock", "clueWords": ["TICK", "TIME", "HOURS"] }
+    ]
+  }

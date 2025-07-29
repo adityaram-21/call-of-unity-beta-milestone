@@ -61,9 +61,9 @@ public class ObjectClickChecker : MonoBehaviour
 
     IEnumerator HandleWin()
     {
-        if (winPopup != null)
+        if (gameManager != null)
         {
-            winPopup.SetActive(true);
+            gameManager.WinGame("Yayyyieeee! You have picked the correct object. The doors are now open.");
         }
 
         yield return new WaitForSeconds(3f);
@@ -77,6 +77,7 @@ public class ObjectClickChecker : MonoBehaviour
         {
             Destroy(doorToRemove);
             Debug.Log("Door removed. Path is now open.");
+            gameManager.LoadNextLevel();
         }
     }
 }

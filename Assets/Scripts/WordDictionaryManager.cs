@@ -36,6 +36,11 @@ public class WordDictionaryManager : MonoBehaviour
 
     void Awake()
     {
+        LoadJson();
+    }
+
+    void LoadJson()
+    {
         TextAsset clueJsonFile = Resources.Load<TextAsset>("Clues/clues");
         if (clueJsonFile == null)
         {
@@ -50,11 +55,25 @@ public class WordDictionaryManager : MonoBehaviour
 
     public void SelectRandomClue()
     {
-        if (clueMappings.clueMappingsList.Count == 0)
+        GameManager gameManager = FindObjectOfType<GameManager>();
+        if (gameManager != null)
         {
-            Debug.LogWarning("No clue mappings available.");
-            return;
+            if (gameManager.currentLevel == 2)
+            {
+                TextAsset clueJsonFile = Resources.Load<TextAsset>("Clues/clues-level2");
+                clueMappings = JsonUtility.FromJson<ClueMappings>(clueJsonFile.text);
+                Debug.Log("Loaded clues for Level 2.");
+            }
+            else
+            {
+                Debug.LogWarning($"No specific clues for Level {gameManager.currentLevel}. Using default clues.");
+            }
         }
+        if (clueMappings.clueMappingsList.Count == 0)
+            {
+                Debug.LogWarning("No clue mappings available.");
+                return;
+            }
 
         // Select a random clue mapping
         int randomIndex = Random.Range(0, clueMappings.clueMappingsList.Count);
