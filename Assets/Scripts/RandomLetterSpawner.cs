@@ -36,9 +36,11 @@ public class RandomLetterSpawner : MonoBehaviour
             Debug.LogError("Missing references on GridLetterSpawner!");
             return;
         }
+    }
 
+    public void SpawnCluesForLevel1()
+    {
         GenerateValidSpawnPoints();
-
         wordDictionaryManager.SelectRandomClue();  // Pick a clue for level 1
         SpawnLettersForClue();
     }

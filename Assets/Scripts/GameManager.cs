@@ -4,14 +4,28 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    [Header("UI Panels")]
     public GameObject startPanel;
     public GameObject pausePanel;
-    public Button startButton;
+    public GameObject gamePanel;
+
+    [Header("UI Buttons")]
+    public Button level1Button;
+    public Button level2Button;
     public Button pauseButton;
     public Button resumeButton;
+    public Button restartButton;
+
+    [Header("Popups")]
     public GameObject losePopup;
     public GameObject winPopup;
+
+    [Header("Game State")]
     public int currentLevel = 1;
+
+    [Header("Objects")]
+    public GameObject doorToRemove;
+    public GameObject letterParent;
 
     void Start()
     {
@@ -20,16 +34,65 @@ public class GameManager : MonoBehaviour
         pausePanel.SetActive(false);
         pauseButton.gameObject.SetActive(false);
 
-        startButton.onClick.AddListener(StartGame);
+        level1Button.onClick.AddListener(StartGame);
+        level2Button.onClick.AddListener(LoadLevel2);
         pauseButton.onClick.AddListener(PauseGame);
         resumeButton.onClick.AddListener(ResumeGame);
+        restartButton.onClick.AddListener(RestartGame);
     }
 
     void StartGame()
     {
+        Debug.Log("Loading level 1...");
+
+        Vector3 playerStartPosition = new Vector3(-7.5f, 4f, 0f);
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            player.transform.position = playerStartPosition;
+        }
+
+        if (doorToRemove != null)
+        {
+            doorToRemove.SetActive(true);
+        }
+
         startPanel.SetActive(false);
+        gamePanel.SetActive(true);
+        currentLevel = 1;
         pauseButton.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(true);
+
         Time.timeScale = 1f;
+        LoadLevel(1);
+    }
+
+    void LoadLevel2()
+    {
+        Debug.Log("Loading level 2...");
+
+        // Remove the door and move the player to the start position of level 2
+        Vector3 playerStartPosition = doorToRemove.transform.position;
+        GameObject player = GameObject.FindWithTag("Player");
+        if (player != null)
+        {
+            player.transform.position = playerStartPosition;
+        }
+
+        if (doorToRemove != null)
+        {
+            doorToRemove.SetActive(false);
+        }
+
+        Debug.Log("Door removed and player moved to level 2 start position.");
+
+        startPanel.SetActive(false);
+        gamePanel.SetActive(true);
+        pauseButton.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(true);
+
+        Time.timeScale = 1f;
+        LoadLevel(2);
     }
 
     void PauseGame()
@@ -78,23 +141,83 @@ public class GameManager : MonoBehaviour
                 loseText.text = message;
             }
 
+            gamePanel.SetActive(false);
             pauseButton.gameObject.SetActive(false);
+            restartButton.gameObject.SetActive(false);
             losePopup.SetActive(true);
             Time.timeScale = 0f; // freeze game on loss
         }
     }
 
-    public void LoadNextLevel()
+    public void LoadLevel(int level)
     {
-        Debug.Log("Loading next level...");
         RandomLetterSpawner spawner = FindObjectOfType<RandomLetterSpawner>();
         LetterRack letterRack = FindObjectOfType<LetterRack>();
+        
+        // Destroy existing letters in the scene
+        if (letterParent != null)
+        {
+            foreach (Transform child in letterParent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+        
         if (spawner != null && letterRack != null)
         {
-            currentLevel++;
-            spawner.SpawnCluesForLevel2(); // Call method to spawn clues for level
+            currentLevel = level;
+            if (gamePanel != null && !gamePanel.activeSelf)
+            {
+                gamePanel.SetActive(true);
+            }
+
+            TimerController timerController = FindObjectOfType<TimerController>();
+            if (timerController != null)
+            {
+                timerController.timerRunning = true;
+                timerController.timeRemaining = level == 1 ? 180f : 300f;
+            }
+
+            if (level == 1)
+            {
+                spawner.SpawnCluesForLevel1();
+            }
+            else if (level == 2)
+            {
+                spawner.SpawnCluesForLevel2();
+            }
+
+            Debug.Log($"Loading clues for level {level}...");
             letterRack.ClearRack(); // Clear the letter rack for the new level
             letterRack.SetupRack(); // Setup the rack with new clues
+
+            PlayerController playerController = FindObjectOfType<PlayerController>();
+            if (playerController != null)
+            {
+                playerController.ToggleFlashlight();
+            }
         }
+    }
+
+    public void RestartGame()
+    {
+        Debug.Log("Restarting game...");
+        currentLevel = 1;
+        PlayerController playerController = FindObjectOfType<PlayerController>();
+        if (playerController != null)
+        {
+            playerController.ToggleFlashlight();
+            playerController.SetMaxBatteryLife();
+        }
+
+        gamePanel.SetActive(false);
+        pausePanel.SetActive(false);
+        losePopup.SetActive(false);
+        winPopup.SetActive(false);
+        startPanel.SetActive(true);
+
+        pauseButton.gameObject.SetActive(false);
+        restartButton.gameObject.SetActive(false);
+        Time.timeScale = 0f; // Pause the game
     }
 }

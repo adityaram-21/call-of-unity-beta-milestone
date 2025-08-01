@@ -28,7 +28,6 @@ public class LetterRack : MonoBehaviour
                 return;
             }
         }
-        SetupRack();
     }
 
     public void ClearRack()

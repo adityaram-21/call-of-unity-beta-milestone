@@ -3,7 +3,7 @@ using TMPro;
 public class TimerController : MonoBehaviour
 {
     public float timeRemaining = 300f; // 5 minutes
-    public bool timerRunning = true;
+    public bool timerRunning = false;
     public TextMeshProUGUI timerText;
     
     void Start()

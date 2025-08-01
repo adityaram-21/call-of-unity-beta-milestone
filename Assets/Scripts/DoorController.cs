@@ -11,7 +11,7 @@ public class DoorController : MonoBehaviour
         if (isOpen) return;
         isOpen = true;
 
-        Debug.Log("🚪 Door is now open!");
+        Debug.Log("Door is now open!");
 
         // Trigger animation (if used)
         if (animator != null)

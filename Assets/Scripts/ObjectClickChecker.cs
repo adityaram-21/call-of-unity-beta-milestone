@@ -75,7 +75,7 @@ public class ObjectClickChecker : MonoBehaviour
     {
         if (gameManager != null)
         {
-            gameManager.WinGame("Yayyyieeee! You have picked the correct object. The doors are now open.");
+            gameManager.WinGame("Clue Decoded successfully! The doors are now open.\n Timer Reset to 5 minutes!");
         }
 
         yield return new WaitForSeconds(3f);
@@ -87,9 +87,9 @@ public class ObjectClickChecker : MonoBehaviour
 
         if (doorToRemove != null)
         {
-            Destroy(doorToRemove);
+            doorToRemove.SetActive(false);
             Debug.Log("Door removed. Path is now open.");
-            gameManager.LoadNextLevel();
+            gameManager.LoadLevel(2);
         }
     }
 }

@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Flashlight")]
     public GameObject flashlight;
-    private bool flashlightOn = true;
+    private bool flashlightOn = false;
     // distance check, use for interaction
     public float maxInteractDistance = 3f;
 
@@ -41,7 +41,21 @@ public class PlayerController : MonoBehaviour
         }
         currentBatteryLife = batteryLife;
         // Initialize flashlight state
-        flashlightOn = true;
+        flashlightOn = false;
+        if (flashlight != null)
+        {
+            flashlight.SetActive(flashlightOn);
+        }
+    }
+
+    public void SetMaxBatteryLife()
+    {
+        currentBatteryLife = batteryLife;
+    }
+
+    public void ToggleFlashlight()
+    {
+        flashlightOn = !flashlightOn;
         if (flashlight != null)
         {
             flashlight.SetActive(flashlightOn);
@@ -66,11 +80,7 @@ public class PlayerController : MonoBehaviour
         // Flashlight Switch
         if (Time.timeScale > 0 && (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Space))) // Right click or Space to toggle flashlight
         {
-            flashlightOn = !flashlightOn;
-            if (flashlight != null)
-            {
-                flashlight.SetActive(flashlightOn);
-            }
+            ToggleFlashlight();
         }
 
         // interaction click, left click
