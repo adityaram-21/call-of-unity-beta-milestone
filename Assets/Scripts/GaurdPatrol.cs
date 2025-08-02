@@ -10,6 +10,8 @@ public class SecurityGuardPatrol : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Transform lightTransform;
 
+    private bool hasStartedPatrol = false;
+
     void Start()
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -32,43 +34,33 @@ public class SecurityGuardPatrol : MonoBehaviour
     }
 
     void Patrol()
+{
+    Transform target = movingRight ? rightPoint : leftPoint;
+
+    // Move towards target
+    transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
+
+    // If reached the target
+    if (Vector2.Distance(transform.position, target.position) < 0.01f)
     {
-        Transform target = movingRight ? rightPoint : leftPoint;
+        movingRight = !movingRight;
 
-        // Move towards target
-        transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
-
-        // If reached the target, flip direction
-        if (Vector2.Distance(transform.position, target.position) < 0.01f)
-        {
-            movingRight = !movingRight;
-            Flip();
-        }
+        // Explicitly face direction
+        Flip(movingRight);  // face right when moving right, left when moving left
     }
+}
 
-    void Flip()
-    {
-        // Flip body
-        Vector3 scale = transform.localScale;
-        scale.x *= -1;
-        transform.localScale = scale;
 
-        // Flip light if needed
-        if (lightTransform != null)
-        {
-            Vector3 lightScale = lightTransform.localScale;
-            lightScale.x *= -1;
-            lightTransform.localScale = lightScale;
 
-            Vector3 lightRotation = lightTransform.eulerAngles;
-            lightRotation.z = 180 - lightRotation.z;
-            lightTransform.eulerAngles = lightRotation;
-        }
+    void Flip(bool faceRight)
+{
+    // Flip the whole diamond to face correct direction (0 = right, 180 = left)
+    float targetZ = faceRight ? -90f : 90f;
+    transform.localRotation = Quaternion.Euler(0f, 0f, targetZ);
+}
 
-        // Flip sprite
-        if (spriteRenderer != null)
-        {
-            spriteRenderer.flipX = !spriteRenderer.flipX;
-        }
-    }
+
+    
+
+
 }
