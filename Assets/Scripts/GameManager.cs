@@ -153,6 +153,7 @@ public class GameManager : MonoBehaviour
     {
         RandomLetterSpawner spawner = FindObjectOfType<RandomLetterSpawner>();
         LetterRack letterRack = FindObjectOfType<LetterRack>();
+        MinimapCameraController minimapCameraController = FindObjectOfType<MinimapCameraController>();
         
         // Destroy existing letters in the scene
         if (letterParent != null)
@@ -181,10 +182,12 @@ public class GameManager : MonoBehaviour
             if (level == 1)
             {
                 spawner.SpawnCluesForLevel1();
+                minimapCameraController.PositionAndSizeCamera(1);
             }
             else if (level == 2)
             {
                 spawner.SpawnCluesForLevel2();
+                minimapCameraController.PositionAndSizeCamera(2);
             }
 
             Debug.Log($"Loading clues for level {level}...");
