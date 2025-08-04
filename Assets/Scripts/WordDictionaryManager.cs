@@ -70,10 +70,10 @@ public class WordDictionaryManager : MonoBehaviour
             }
         }
         if (clueMappings.clueMappingsList.Count == 0)
-            {
-                Debug.LogWarning("No clue mappings available.");
-                return;
-            }
+        {
+            Debug.LogWarning("No clue mappings available.");
+            return;
+        }
 
         // Select a random clue mapping
         int randomIndex = Random.Range(0, clueMappings.clueMappingsList.Count);
@@ -102,7 +102,7 @@ public class WordDictionaryManager : MonoBehaviour
         Debug.Log($"Ciphered clue: {cipherWord}");
     }
 
-    public bool ValidateClueWord(string playerWord,out string targetName) //out string targetTag, )
+    public bool ValidateClueWord(string playerWord, out string targetName) //out string targetTag, )
     {
         //targetTag = this.targetObjectTagName;
         targetName = this.targetObjectName;
@@ -116,4 +116,10 @@ public class WordDictionaryManager : MonoBehaviour
         // Check if the player's word matches the target clue word
         return playerWord.ToUpper() == targetClueWord;
     }
+    public void SelectTutorialClue()
+{
+    // Pick a fixed word that exists in your clue/letter set
+    targetClueWord = "REST";  // ← Change this if needed
+}
+
 }

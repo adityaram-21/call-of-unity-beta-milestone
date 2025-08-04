@@ -429,6 +429,14 @@ public class GameManager : MonoBehaviour
                 spawner.SpawnCluesForLevel2();
             }
 
+            if (letterRack.wordManager != null)
+{
+    if (level == 0)
+        letterRack.wordManager.SelectTutorialClue(); // Only if you have a fixed tutorial clue
+    else
+        letterRack.wordManager.SelectRandomClue();
+}
+
 
             Debug.Log($"Loading clues for level {level}...");
             letterRack.ClearRack(); // Clear the letter rack for the new level
