@@ -17,6 +17,7 @@ TagManager:
   - TransparentFX
   - Ignore Raycast
   - wall
+  - Minimap
   - Water
   - UI
   - Detection
