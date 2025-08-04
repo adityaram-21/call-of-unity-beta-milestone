@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -202,22 +204,30 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Debug.Log("Restarting game...");
-        currentLevel = 1;
-        PlayerController playerController = FindObjectOfType<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.ToggleFlashlight();
-            playerController.SetMaxBatteryLife();
-        }
+        
+        Time.timeScale = 0f;
+        // Completely reset everything, including all UI/script state
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        
+        // just in case, for backup
+        //currentLevel = 1;
+        // PlayerController playerController = FindObjectOfType<PlayerController>();
+        // if (playerController != null)
+        //  {
+        //     playerController.ToggleFlashlight();
+        //    playerController.SetMaxBatteryLife();
+        //  }
 
-        gamePanel.SetActive(false);
-        pausePanel.SetActive(false);
-        losePopup.SetActive(false);
-        winPopup.SetActive(false);
-        startPanel.SetActive(true);
+       // gamePanel.SetActive(false);
+       // pausePanel.SetActive(false);
+       // losePopup.SetActive(false);
+       // winPopup.SetActive(false);
+       // startPanel.SetActive(true);
 
-        pauseButton.gameObject.SetActive(false);
-        restartButton.gameObject.SetActive(false);
-        Time.timeScale = 0f; // Pause the game
+       // pauseButton.gameObject.SetActive(false);
+       // restartButton.gameObject.SetActive(false);
+       // Time.timeScale = 0f; // Pause the game
     }
+    
+    
 }
