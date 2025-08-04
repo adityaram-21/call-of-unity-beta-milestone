@@ -16,12 +16,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
+  - wall
   - Minimap
   - Water
   - UI
   - Detection
   - Letters
-  - Minimap Icons
+  - player
   - 
   - 
   - 

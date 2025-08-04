@@ -3,10 +3,20 @@ using UnityEngine;
 public class SecurityGuardPatrol : MonoBehaviour
 {
     public float speed = 2f;
-    public Transform leftPoint;   // Point A
-    public Transform rightPoint;  // Point B
+    public Transform leftPoint;
+    public Transform rightPoint;
+    public Transform player;
+    public float chaseTime = 5f; // Duration to chase the player
+    public float returnDelay = 2f; // Wait before returning to patrol
 
     private bool movingRight = true;
+    private Vector3 originalPosition;
+    private float chaseTimer;
+    private float returnTimer;
+
+    private enum GuardState { Patrolling, Chasing, Returning }
+    private GuardState currentState = GuardState.Patrolling;
+
     private SpriteRenderer spriteRenderer;
     private Transform lightTransform;
 
@@ -14,61 +24,78 @@ public class SecurityGuardPatrol : MonoBehaviour
     {
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         lightTransform = transform.Find("LightObject");
-
-        if (leftPoint == null || rightPoint == null)
-        {
-            Debug.LogError("LeftPoint or RightPoint not assigned.");
-            return;
-        }
-
-        // Start exactly at leftPoint
         transform.position = leftPoint.position;
-        Debug.Log("Guard starts at: " + transform.position);
+        originalPosition = transform.position;
     }
 
     void Update()
     {
-        Patrol();
+        switch (currentState)
+        {
+            case GuardState.Patrolling:
+                Patrol();
+                break;
+            case GuardState.Chasing:
+                ChasePlayer();
+                break;
+            case GuardState.Returning:
+                ReturnToPatrol();
+                break;
+        }
     }
 
     void Patrol()
     {
         Transform target = movingRight ? rightPoint : leftPoint;
-
-        // Move towards target
         transform.position = Vector2.MoveTowards(transform.position, target.position, speed * Time.deltaTime);
 
-        // If reached the target, flip direction
         if (Vector2.Distance(transform.position, target.position) < 0.01f)
         {
             movingRight = !movingRight;
-            Flip();
+            Flip(movingRight);
         }
     }
 
-    void Flip()
+    void ChasePlayer()
     {
-        // Flip body
-        Vector3 scale = transform.localScale;
-        scale.x *= -1;
-        transform.localScale = scale;
+        if (player == null) return;
 
-        // Flip light if needed
-        if (lightTransform != null)
+        transform.position = Vector2.MoveTowards(transform.position, player.position, speed * 1.5f * Time.deltaTime);
+        Flip(transform.position.x < player.position.x); // face direction of movement
+
+        chaseTimer -= Time.deltaTime;
+
+        if (chaseTimer <= 0f)
         {
-            Vector3 lightScale = lightTransform.localScale;
-            lightScale.x *= -1;
-            lightTransform.localScale = lightScale;
-
-            Vector3 lightRotation = lightTransform.eulerAngles;
-            lightRotation.z = 180 - lightRotation.z;
-            lightTransform.eulerAngles = lightRotation;
+            currentState = GuardState.Returning;
+            returnTimer = returnDelay;
         }
+    }
 
-        // Flip sprite
-        if (spriteRenderer != null)
+    void ReturnToPatrol()
+    {
+        transform.position = Vector2.MoveTowards(transform.position, originalPosition, speed * Time.deltaTime);
+        Flip(transform.position.x < originalPosition.x);
+
+        returnTimer -= Time.deltaTime;
+
+        if (Vector2.Distance(transform.position, originalPosition) < 0.1f && returnTimer <= 0f)
         {
-            spriteRenderer.flipX = !spriteRenderer.flipX;
+            transform.position = originalPosition;
+            currentState = GuardState.Patrolling;
         }
+    }
+
+    void Flip(bool faceRight)
+    {
+        float targetZ = faceRight ? -90f : 90f;
+        transform.localRotation = Quaternion.Euler(0f, 0f, targetZ);
+    }
+
+    // Called by your FlashlightDetector script on detection
+    public void OnPlayerDetected()
+    {
+        chaseTimer = chaseTime;
+        currentState = GuardState.Chasing;
     }
 }
