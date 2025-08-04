@@ -1,26 +1,32 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialSequence : MonoBehaviour
 {
-    public List<GameObject> tutorialSteps; // Drag & drop them in order in the Inspector
-    public float delayBetweenSteps = 3f; // used for auto-advance (optional)
+    public List<GameObject> tutorialSteps; // Assign WelcomePanel, MovementPanel, etc., in order
+    public float delayBetweenSteps = 3f;
 
     private int currentStepIndex = 0;
 
     void Start()
-{
-    Debug.Log("Tutorial sequence starting...");
-    HideAll();
-    ShowStep(currentStepIndex);
-}
-
+    {
+        Debug.Log("Tutorial sequence starting...");
+        HideAll();
+        ShowStep(currentStepIndex); // Only Welcome panel shows
+    }
 
     void Update()
     {
-        // Advance on spacebar
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && currentStepIndex == 2) // For Spacebar step
+        {
+            AdvanceStep();
+        }
+
+        if (currentStepIndex == 1 && (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) ||
+            Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) ||
+            Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) ||
+            Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow)))
         {
             AdvanceStep();
         }
@@ -35,32 +41,27 @@ public class TutorialSequence : MonoBehaviour
     }
 
     void ShowStep(int index)
-{
-    if (index >= 0 && index < tutorialSteps.Count)
     {
-        Debug.Log("Showing tutorial step: " + tutorialSteps[index].name);
-        tutorialSteps[index].SetActive(true);
+        if (index >= 0 && index < tutorialSteps.Count)
+        {
+            tutorialSteps[index].SetActive(true);
+        }
     }
-}
-
 
     public void AdvanceStep()
     {
-        // Hide current step
         if (currentStepIndex < tutorialSteps.Count)
             tutorialSteps[currentStepIndex].SetActive(false);
 
         currentStepIndex++;
 
-        // Show next step if available
         if (currentStepIndex < tutorialSteps.Count)
         {
             ShowStep(currentStepIndex);
         }
         else
         {
-            Debug.Log("Tutorial finished.");
-            gameObject.SetActive(false); // Hide entire panel if done
+            gameObject.SetActive(false); // Hide entire tutorial canvas
         }
     }
 }

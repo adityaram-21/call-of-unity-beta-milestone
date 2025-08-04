@@ -235,6 +235,16 @@ public class GameManager : MonoBehaviour
     public GameObject startPanel;
     public GameObject pausePanel;
     public GameObject gamePanel;
+    public GameObject welcomePanel;
+    public GameObject movementPanel;    
+    public GameObject spacebarPanel;
+    public GameObject codewordPanel;
+    public GameObject mappingPanel;
+    public GameObject pickingPanel;
+    public GameObject swappingPanel;
+
+
+
 
     [Header("UI Buttons")]
     public Button level1Button;
@@ -243,6 +253,10 @@ public class GameManager : MonoBehaviour
     public Button pauseButton;
     public Button resumeButton;
     public Button restartButton;
+    public Button welcomeNextButton;
+    public Button codewordNextButton;
+    public Button mappingButton;
+
 
     [Header("Popups")]
     public GameObject losePopup;
@@ -254,6 +268,14 @@ public class GameManager : MonoBehaviour
     [Header("Objects")]
     public GameObject doorToRemove;
     public GameObject letterParent;
+
+    [Header("Tutorial")]
+    public Vector3 tutorialStartPosition = new Vector3(-12.65f, -3.9f, 0f); // Adjust to your room's actual position
+    public GameObject tutorialCanvas;
+    private bool movementDone = false;
+
+    
+    
 
     void Start()
     {
@@ -275,6 +297,44 @@ public class GameManager : MonoBehaviour
         Debug.Log("Tutorial Button Clicked!");
         currentLevel = 0;
         Time.timeScale = 1f;
+
+        // Move player to tutorial start position
+        GameObject player = GameObject.FindWithTag("Player");
+
+        if (welcomeNextButton != null)
+        {
+            welcomeNextButton.onClick.AddListener(ShowMovementPanel);
+        }
+
+        if (player != null)
+        {
+            player.transform.position = tutorialStartPosition;
+        }
+
+        // Show tutorial UI
+        if (tutorialCanvas != null)
+        {
+            tutorialCanvas.SetActive(true);
+        }
+
+        if (codewordNextButton != null)
+        {
+            codewordNextButton.onClick.AddListener(ShowMappingPanel);
+        }
+
+        if (mappingButton != null)
+        {
+            mappingButton.onClick.AddListener(ShowPickingPanel);
+        }
+
+        
+
+        // Hide the other UIs
+        startPanel.SetActive(false);
+        gamePanel.SetActive(false);
+        pausePanel.SetActive(false);
+
+        // Optionally call LoadLevel(0) if needed for clue logic
         LoadLevel(0);
     }
 
@@ -304,6 +364,96 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
         LoadLevel(1);
     }
+
+    void ShowMovementPanel()
+    {
+        if (welcomePanel != null)
+            welcomePanel.SetActive(false);
+
+        if (movementPanel != null)
+            movementPanel.SetActive(true);
+
+        Debug.Log("Moved to Movement Tutorial Panel");
+    }
+
+    void Update()
+    {
+        // Movement → Spacebar
+        if (!movementDone && movementPanel != null && movementPanel.activeSelf)
+        {
+            if (Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.A) ||
+                Input.GetKeyDown(KeyCode.S) || Input.GetKeyDown(KeyCode.D) ||
+                Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.DownArrow) ||
+                Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.RightArrow))
+            {
+                ShowSpacebarPanel();
+            }
+        }
+
+        // Spacebar → Codeword
+        if (spacebarPanel != null && spacebarPanel.activeSelf && Input.GetKeyDown(KeyCode.Space))
+        {
+            spacebarPanel.SetActive(false);
+            if (codewordPanel != null) codewordPanel.SetActive(true);
+        }
+
+        // Codeword → Mapping via button
+        // Already handled by codewordNextButton.onClick → ShowMappingPanel()
+
+        // Mapping → Picking on mouse click
+        if (mappingPanel != null && mappingPanel.activeSelf && Input.GetMouseButtonDown(0))
+        {
+            ShowPickingPanel();  // will hide mapping and show picking
+        }
+
+        // Picking → Swapping on mouse click
+        else if (pickingPanel != null && pickingPanel.activeSelf && Input.GetMouseButtonDown(0))
+        {
+            ShowSwappingPanel();  // will hide picking and show swapping
+        }
+    }
+
+
+    void ShowSpacebarPanel()
+    {
+        movementDone = true;
+
+        if (movementPanel != null)
+            movementPanel.SetActive(false);
+
+        if (spacebarPanel != null)
+            spacebarPanel.SetActive(true);
+
+        Debug.Log("Moved to Spacebar Tutorial Panel");
+    }
+
+    void ShowMappingPanel()
+    {
+        if (codewordPanel != null)
+            codewordPanel.SetActive(false);
+
+        if (mappingPanel != null)
+            mappingPanel.SetActive(true);
+
+        Debug.Log("Moved to Mapping Tutorial Panel");
+    }
+
+    void ShowPickingPanel()
+    {
+        if (mappingPanel != null) mappingPanel.SetActive(false);
+        if (pickingPanel != null) pickingPanel.SetActive(true);
+        Debug.Log("Moved to Picking Tutorial Panel");
+    }
+
+    void ShowSwappingPanel()
+    {
+        if (pickingPanel != null) pickingPanel.SetActive(false);
+        if (swappingPanel != null) swappingPanel.SetActive(true);
+        Debug.Log("Moved to Swapping Tutorial Panel");
+    }
+
+
+
 
     void LoadLevel2()
     {
