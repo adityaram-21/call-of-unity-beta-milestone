@@ -8,6 +8,7 @@ public class RandomLetterSpawner : MonoBehaviour
     public Grid grid;
     public Tilemap groundTilemap;
     public Tilemap groundTilemapKitchen;
+    public Tilemap groundTileTutor;
     public Tilemap wallTilemap;
     public Tilemap decorationTilemap;
     public WordDictionaryManager wordDictionaryManager;
@@ -35,6 +36,33 @@ public class RandomLetterSpawner : MonoBehaviour
         {
             Debug.LogError("Missing references on GridLetterSpawner!");
             return;
+        }
+    }
+
+    public void SpawnCluesForTutorial()
+    {
+        validSpawnPoints.Clear();
+        GenerateValidSpawnPoints();  // Uses default groundTilemap
+        string tutorialWord = "HELPZIK";
+        List<char> lettersToSpawn = new List<char>(tutorialWord);
+
+        // Spawn each letter at a valid location
+        for (int i = 0; i < lettersToSpawn.Count; i++)
+        {
+            if (validSpawnPoints.Count == 0)
+            {
+                Debug.LogWarning("Ran out of spawn points for tutorial!");
+                break;
+            }
+
+            int spawnIndex = Random.Range(0, validSpawnPoints.Count);
+            Vector3 spawnPos = validSpawnPoints[spawnIndex];
+            validSpawnPoints.RemoveAt(spawnIndex);
+
+            spawnPos.z = -1f;
+            GameObject letterObj = Instantiate(letterPrefab, letterParent);
+            letterObj.transform.position = spawnPos;
+            letterObj.GetComponent<Letter>().SetLetter(lettersToSpawn[i]);
         }
     }
 
