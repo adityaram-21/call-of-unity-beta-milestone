@@ -17,6 +17,7 @@ public class FlashlightDetector : MonoBehaviour
     [Header("Ray Settings")]
     public int rayCount = 30; // how many rays to cast
     public LayerMask detectionLayer; // layer to trigger alarm
+    public LayerMask detectionZoneOnlyLayer; // Only detect AlarmZone
     public LayerMask visibleLayer; // layer just visible in weak light
 
     [Header("Debug")]
@@ -108,13 +109,19 @@ public class FlashlightDetector : MonoBehaviour
                 RaycastHit2D hit = Physics2D.Raycast(origin, dir, strongLightDistance, detectionLayer);
                 if (hit.collider != null)
                 {
-                    alarmTriggeredThisFrame = true;
-
-                    if (!isAlarmOn)
+                    int hitLayer = hit.collider.gameObject.layer;
+                    // Detect if collider is detectionZone layer
+                    bool isDetectionZone = ((1 << hitLayer) & detectionZoneOnlyLayer) != 0;
+                    if (isDetectionZone)
                     {
-                        isAlarmOn = true;
-                        TriggerAlarm(hit.collider.gameObject);
+                        alarmTriggeredThisFrame = true; // Real hit detectionZone
+                        if (!isAlarmOn)
+                        {
+                            isAlarmOn = true;
+                            TriggerAlarm(hit.collider.gameObject);
+                        }
                     }
+                    // Or it is wall, do nothing
                 }
             }
             // Weak light area
