@@ -409,7 +409,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -437,7 +437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -537,6 +537,161 @@ MonoBehaviour:
   winPopup: {fileID: 0}
   losePopup: {fileID: 0}
   doorToRemove: {fileID: 0}
+--- !u!1 &137071694
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 137071699}
+  - component: {fileID: 137071698}
+  - component: {fileID: 137071697}
+  - component: {fileID: 137071696}
+  - component: {fileID: 137071695}
+  m_Layer: 0
+  m_Name: Minimap Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &137071695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137071694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10438883574f7482a85142438e314cfb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundTilemapBedroom: {fileID: 1652637417}
+  groundTilemapKitchen: {fileID: 982715758}
+  grid: {fileID: 1010754016}
+  cameraHeight: 10
+  padding: 1
+--- !u!114 &137071696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137071694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    m_Quality: 3
+    m_FrameInfluence: 0.1
+    m_JitterScale: 1
+    m_MipBias: 0
+    m_VarianceClampScale: 0.9
+    m_ContrastAdaptiveSharpening: 0
+--- !u!81 &137071697
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137071694}
+  m_Enabled: 1
+--- !u!20 &137071698
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137071694}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.254902, g: 0.4117647, b: 0.882353, a: 1}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_Iso: 200
+  m_ShutterSpeed: 0.005
+  m_Aperture: 16
+  m_FocusDistance: 10
+  m_FocalLength: 50
+  m_BladeCount: 5
+  m_Curvature: {x: 2, y: 11}
+  m_BarrelClipping: 0.25
+  m_Anamorphism: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 0.086602546
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 1544
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 8400000, guid: ee453a36f8dba42d8a961a1029167d02, type: 2}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &137071699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137071694}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &144629984
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4640,7 +4795,7 @@ GameObject:
   - component: {fileID: 176030635}
   - component: {fileID: 176030634}
   - component: {fileID: 176030637}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: ExitDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4833,7 +4988,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -4861,7 +5016,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -6068,7 +6223,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -6096,7 +6251,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -10653,7 +10808,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 673399993}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: RedLight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12374,6 +12529,10 @@ PrefabInstance:
       value: Table
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
       value: Tub
       objectReference: {fileID: 0}
@@ -12404,6 +12563,10 @@ PrefabInstance:
     - target: {fileID: 5214279154737298800, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -0.137
+      objectReference: {fileID: 0}
+    - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -17219,7 +17382,7 @@ GameObject:
   - component: {fileID: 1218499393}
   - component: {fileID: 1218499394}
   - component: {fileID: 1218499395}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: ThePlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -19028,7 +19191,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1265576541}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73fbf41ca375a4c4b966aa1de0ec3872, type: 3}
   m_Name: 
@@ -19036,7 +19199,7 @@ MonoBehaviour:
   speed: 2
   leftPoint: {fileID: 481144865}
   rightPoint: {fileID: 1867134370}
-  player: {fileID: 0}
+  player: {fileID: 1218499392}
   chaseTime: 5
   returnDelay: 2
 --- !u!1 &1257712740
@@ -19050,7 +19213,7 @@ GameObject:
   - component: {fileID: 1257712741}
   - component: {fileID: 1257712742}
   - component: {fileID: 1257712743}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: Triangle
   m_TagString: EnemyLight
   m_Icon: {fileID: 0}
@@ -19323,7 +19486,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1254848183}
   - component: {fileID: 1254848184}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: SecurityGaurd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19431,7 +19594,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -19459,7 +19622,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -20164,7 +20327,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 255
+    m_Bits: 4294967295
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -20577,7 +20740,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -20605,7 +20768,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -21295,7 +21458,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 963710846285422093, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -21327,7 +21490,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_Layer
-      value: 3
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6629085767533238555, guid: 72f590df6aeca7541a84bc5c1352bc81, type: 3}
       propertyPath: m_TagString
@@ -25755,7 +25918,7 @@ GameObject:
   - component: {fileID: 2035768641}
   - component: {fileID: 2035768640}
   - component: {fileID: 2035768639}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: ExitDoor (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26100,7 +26263,7 @@ GameObject:
   - component: {fileID: 2124775945}
   - component: {fileID: 2124775946}
   - component: {fileID: 2124775947}
-  m_Layer: 3
+  m_Layer: 10
   m_Name: Isometric Diamond
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26489,9 +26652,9 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1363416516}
+  - {fileID: 137071699}
   - {fileID: 1010754017}
   - {fileID: 1314902526}
-  - {fileID: 1397688842}
   - {fileID: 1218499392}
   - {fileID: 1531549091}
   - {fileID: 1325186668}
