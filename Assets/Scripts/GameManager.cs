@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
@@ -350,22 +351,25 @@ public class GameManager : MonoBehaviour
     public void RestartGame()
     {
         Debug.Log("Restarting game...");
-        currentLevel = 1;
-        PlayerController playerController = FindObjectOfType<PlayerController>();
-        if (playerController != null)
-        {
-            playerController.ToggleFlashlight();
-            playerController.SetMaxBatteryLife();
-        }
-
-        gamePanel.SetActive(false);
-        pausePanel.SetActive(false);
-        losePopup.SetActive(false);
-        winPopup.SetActive(false);
-        startPanel.SetActive(true);
-
-        pauseButton.gameObject.SetActive(false);
-        restartButton.gameObject.SetActive(false);
         Time.timeScale = 0f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        
+        //currentLevel = 1;
+        //PlayerController playerController = FindObjectOfType<PlayerController>();
+        //if (playerController != null)
+        //{
+        //    playerController.ToggleFlashlight();
+        //    playerController.SetMaxBatteryLife();
+        //}
+
+        //gamePanel.SetActive(false);
+        //pausePanel.SetActive(false);
+        //losePopup.SetActive(false);
+        //winPopup.SetActive(false);
+        //startPanel.SetActive(true);
+
+        //pauseButton.gameObject.SetActive(false);
+        //restartButton.gameObject.SetActive(false);
+        
     }
 }

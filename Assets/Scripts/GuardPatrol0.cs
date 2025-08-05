@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class SecurityGuardPatrol : MonoBehaviour
+public class SecurityGuardPatrol0 : MonoBehaviour
 {
     [Header("Patrol Speed")]
     public float speed = 2f;
