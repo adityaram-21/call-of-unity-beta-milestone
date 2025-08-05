@@ -16,6 +16,7 @@ public class LetterRack : MonoBehaviour
 
     private void Start()
     {
+        // StartGame();
         clueSolved = false;
         successPopup.SetActive(false);
 
@@ -35,14 +36,17 @@ public class LetterRack : MonoBehaviour
         foreach (var slot in slots)
         {
             slot.Clear();
-            slot.DestroyUI();
+            slot.DestroyUI(); // This should destroy the visual slot
         }
         slots.Clear();
         clueSolved = false;
     }
 
+
     public void SetupRack()
     {
+        Debug.LogWarning("SetupRack() called!");
+
         clueWord = wordManager.targetClueWord;
 
         if (string.IsNullOrEmpty(clueWord))
@@ -118,14 +122,41 @@ public class LetterRack : MonoBehaviour
         }
     }
 
+    // public void SetupTutorialRack(string word)
+    // {
+    //     clueWord = word.ToUpper();
+
+    //     ClearRack();
+
+    //     for (int i = 0; i < clueWord.Length; i++)
+    //     {
+    //         var slot = Instantiate(slotTemplate, slotContainer);
+    //         slot.gameObject.SetActive(true);
+
+    //         var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+    //         slots.Add(new Slot(text));
+
+    //         int slotIndex = i;
+    //         var button = slot.gameObject.AddComponent<UnityEngine.UI.Button>();
+    //         button.onClick.AddListener(() => PopLetter(slotIndex));
+
+    //         var drag = slot.gameObject.AddComponent<DraggableSlot>();
+    //         drag.slotIndex = slotIndex;
+    //         drag.rack = this;
+    //     }
+
+    //     clueSolved = false;
+    //     successPopup.SetActive(false);
+    // }
+
+
     private void CheckWord()
     {
         if (clueSolved) return;
 
         foreach (var slot in slots)
         {
-            if (slot.Letter == '\0')
-                return;
+            if (slot.Letter == '\0') return; // Not all filled
         }
 
         string constructedWord = "";
@@ -134,12 +165,25 @@ public class LetterRack : MonoBehaviour
             constructedWord += slot.Letter;
         }
 
+        Debug.Log(constructedWord);
+
         if (constructedWord.ToUpper() == clueWord.ToUpper())
         {
             clueSolved = true;
-            StartCoroutine(ShowPopup(successPopup));
+            GameManager gameManager = FindObjectOfType<GameManager>();
+            if (gameManager.currentLevel == 0)
+            {
+                gameManager.ShowFinalTutorialPopup();
+            }
+            else
+            {
+                StartCoroutine(ShowPopup(successPopup));
+                
+            }
+                
         }
     }
+
 
     private IEnumerator ShowPopup(GameObject popup)
     {
@@ -152,6 +196,7 @@ public class LetterRack : MonoBehaviour
     {
         successPopup.SetActive(false);
     }
+    
 
     private class Slot
     {
@@ -193,7 +238,10 @@ public class LetterRack : MonoBehaviour
         public void DestroyUI()
         {
             if (label != null)
-                GameObject.Destroy(label.transform.parent.gameObject);
+                GameObject.Destroy(label.transform.parent.gameObject); // Destroys the whole slot
         }
+
+
+        
     }
 }
