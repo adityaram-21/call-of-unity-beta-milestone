@@ -21,6 +21,8 @@ public class RandomLetterSpawner : MonoBehaviour
     private List<Vector3> validSpawnPoints = new List<Vector3>();
     private string alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+    private List<Vector3> fixedPositions = new List<Vector3>();
+
     void Awake()
     {
         if (wordDictionaryManager == null)
@@ -41,43 +43,32 @@ public class RandomLetterSpawner : MonoBehaviour
 
     public void SpawnCluesForTutorial()
     {
-        validSpawnPoints.Clear();
-        GenerateValidSpawnPoints();  // Uses default groundTilemap
-        string tutorialWord = "HELPZIK";
-        List<char> lettersToSpawn = new List<char>(tutorialWord);
+        validSpawnPoints.Clear();  // Not needed, but just to keep structure
 
-        // Spawn each letter at a valid location
-        for (int i = 0; i < lettersToSpawn.Count; i++)
-        {
-            if (validSpawnPoints.Count == 0)
-            {
-                Debug.LogWarning("Ran out of spawn points for tutorial!");
-                break;
-            }
+        wordDictionaryManager.SelectTutorialClue("SIT");
 
-            int spawnIndex = Random.Range(0, validSpawnPoints.Count);
-            Vector3 spawnPos = validSpawnPoints[spawnIndex];
-            validSpawnPoints.RemoveAt(spawnIndex);
+        fixedPositions.Add(new Vector3(-13f, -2f, -1f));
+        fixedPositions.Add(new Vector3(-13f, -1f, -1f));
+        fixedPositions.Add(new Vector3(-13f, 0f, -1f));
+    
 
-            spawnPos.z = -1f;
-            GameObject letterObj = Instantiate(letterPrefab, letterParent);
-            letterObj.transform.position = spawnPos;
-            letterObj.GetComponent<Letter>().SetLetter(lettersToSpawn[i]);
-        }
+        SpawnLettersForClue(true);
+
+
     }
 
     public void SpawnCluesForLevel1()
     {
         GenerateValidSpawnPoints();
         wordDictionaryManager.SelectRandomClue();  // Pick a clue for level 1
-        SpawnLettersForClue();
+        SpawnLettersForClue(false);
     }
 
     public void SpawnCluesForLevel2()
     {
         GenerateValidSpawnPoints(groundTilemapKitchen);
         wordDictionaryManager.SelectRandomClue();  // Pick a clue for level 2
-        SpawnLettersForClue();
+        SpawnLettersForClue(false);
     }
 
     void GenerateValidSpawnPoints(Tilemap tilemap = null)
@@ -113,7 +104,7 @@ public class RandomLetterSpawner : MonoBehaviour
         }
     }
 
-    void SpawnLettersForClue()
+    void SpawnLettersForClue(bool isTutorial)
     {
         List<char> lettersToSpawn = new List<char>();
 
@@ -131,11 +122,15 @@ public class RandomLetterSpawner : MonoBehaviour
         }
 
         // Add bogus letters
-        for (int i = 0; i < extraBogusLetters; i++)
+        if (!isTutorial)
         {
-            char bogus = alphabet[Random.Range(0, alphabet.Length)];
-            lettersToSpawn.Add(bogus);
+            for (int i = 0; i < extraBogusLetters; i++)
+            {
+                char bogus = alphabet[Random.Range(0, alphabet.Length)];
+                lettersToSpawn.Add(bogus);
+            }
         }
+
 
         // Shuffle the letters
         for (int i = 0; i < lettersToSpawn.Count; i++)
@@ -144,18 +139,20 @@ public class RandomLetterSpawner : MonoBehaviour
             (lettersToSpawn[i], lettersToSpawn[randIndex]) = (lettersToSpawn[randIndex], lettersToSpawn[i]);
         }
 
+        List<Vector3> finalSpawnPoints = isTutorial ? fixedPositions : validSpawnPoints;
         // Spawn letters at random valid points
+        Debug.Log(finalSpawnPoints);
         for (int i = 0; i < lettersToSpawn.Count; i++)
         {
-            if (validSpawnPoints.Count == 0)
+            if (finalSpawnPoints.Count == 0)
             {
                 Debug.LogWarning("Ran out of spawn points for letters!");
                 break;
             }
 
-            int spawnIndex = Random.Range(0, validSpawnPoints.Count);
-            Vector3 spawnPos = validSpawnPoints[spawnIndex];
-            validSpawnPoints.RemoveAt(spawnIndex);  // Prevent reuse of same spot
+            int spawnIndex = Random.Range(0, finalSpawnPoints.Count);
+            Vector3 spawnPos = finalSpawnPoints[spawnIndex];
+            finalSpawnPoints.RemoveAt(spawnIndex);  // Prevent reuse of same spot
 
             spawnPos.z = -1f;
             GameObject letterObj = Instantiate(letterPrefab, letterParent);
