@@ -122,32 +122,32 @@ public class LetterRack : MonoBehaviour
         }
     }
 
-    public void SetupTutorialRack(string word)
-    {
-        clueWord = word.ToUpper();
+    // public void SetupTutorialRack(string word)
+    // {
+    //     clueWord = word.ToUpper();
 
-        ClearRack();
+    //     ClearRack();
 
-        for (int i = 0; i < clueWord.Length; i++)
-        {
-            var slot = Instantiate(slotTemplate, slotContainer);
-            slot.gameObject.SetActive(true);
+    //     for (int i = 0; i < clueWord.Length; i++)
+    //     {
+    //         var slot = Instantiate(slotTemplate, slotContainer);
+    //         slot.gameObject.SetActive(true);
 
-            var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-            slots.Add(new Slot(text));
+    //         var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
+    //         slots.Add(new Slot(text));
 
-            int slotIndex = i;
-            var button = slot.gameObject.AddComponent<UnityEngine.UI.Button>();
-            button.onClick.AddListener(() => PopLetter(slotIndex));
+    //         int slotIndex = i;
+    //         var button = slot.gameObject.AddComponent<UnityEngine.UI.Button>();
+    //         button.onClick.AddListener(() => PopLetter(slotIndex));
 
-            var drag = slot.gameObject.AddComponent<DraggableSlot>();
-            drag.slotIndex = slotIndex;
-            drag.rack = this;
-        }
+    //         var drag = slot.gameObject.AddComponent<DraggableSlot>();
+    //         drag.slotIndex = slotIndex;
+    //         drag.rack = this;
+    //     }
 
-        clueSolved = false;
-        successPopup.SetActive(false);
-    }
+    //     clueSolved = false;
+    //     successPopup.SetActive(false);
+    // }
 
 
     private void CheckWord()
@@ -165,19 +165,22 @@ public class LetterRack : MonoBehaviour
             constructedWord += slot.Letter;
         }
 
-        if (constructedWord.ToUpper() == "SIT")
+        Debug.Log(constructedWord);
+
+        if (constructedWord.ToUpper() == clueWord.ToUpper())
         {
             clueSolved = true;
-
-            // For tutorial, show final popup
-            if (GameManager.Instance != null)
+            GameManager gameManager = FindObjectOfType<GameManager>();
+            if (gameManager.currentLevel == 0)
             {
-                GameManager.Instance.ShowFinalTutorialPopup();
+                gameManager.ShowFinalTutorialPopup();
             }
             else
             {
                 StartCoroutine(ShowPopup(successPopup));
+                
             }
+                
         }
     }
 

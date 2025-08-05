@@ -116,10 +116,9 @@ public class WordDictionaryManager : MonoBehaviour
         // Check if the player's word matches the target clue word
         return playerWord.ToUpper() == targetClueWord;
     }
-    public void SelectTutorialClue()
-{
-    // Pick a fixed word that exists in your clue/letter set
-    targetClueWord = "REST";  // ← Change this if needed
-}
+    public void SelectTutorialClue(string clue)
+    {
+        targetClueWord = clue;  
+    }
 
 }

@@ -1,6 +1,8 @@
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour
 {
@@ -9,7 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject pausePanel;
     public GameObject gamePanel;
     public GameObject welcomePanel;
-    public GameObject movementPanel;    
+    public GameObject movementPanel;
     public GameObject spacebarPanel;
     public GameObject codewordPanel;
     public GameObject mappingPanel;
@@ -197,12 +199,22 @@ public class GameManager : MonoBehaviour
     }
 
     public void ShowFinalTutorialPopup()
-{
-    if (finalTutorialPopup != null)
     {
-        finalTutorialPopup.SetActive(true);
+
+        if (finalTutorialPopup != null)
+        {
+            swappingPanel?.SetActive(false);
+            StartCoroutine(ShowPopup(finalTutorialPopup));
+        }
     }
-}
+
+
+    private IEnumerator ShowPopup(GameObject popup)
+    {
+        popup.SetActive(true);
+        yield return new WaitForSeconds(2.5f);
+        popup.SetActive(false);
+    }
 
     void LoadLevel2()
     {
@@ -320,17 +332,12 @@ public class GameManager : MonoBehaviour
                 minimapCameraController.PositionAndSizeCamera(2);
             }
 
-            if (letterRack.wordManager != null)
-            {
-                if (level == 0)
-                    letterRack.wordManager.SelectTutorialClue();
-                else
-                    letterRack.wordManager.SelectRandomClue();
-            }
 
             Debug.Log($"Loading clues for level {level}...");
             letterRack.ClearRack();
             letterRack.SetupRack();
+
+
 
             PlayerController playerController = FindObjectOfType<PlayerController>();
             if (playerController != null)
