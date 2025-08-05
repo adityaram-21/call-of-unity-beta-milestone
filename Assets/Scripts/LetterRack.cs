@@ -16,6 +16,7 @@ public class LetterRack : MonoBehaviour
 
     private void Start()
     {
+        // StartGame();
         clueSolved = false;
         successPopup.SetActive(false);
 
@@ -35,14 +36,17 @@ public class LetterRack : MonoBehaviour
         foreach (var slot in slots)
         {
             slot.Clear();
-            slot.DestroyUI();
+            slot.DestroyUI(); // This should destroy the visual slot
         }
         slots.Clear();
         clueSolved = false;
     }
 
+
     public void SetupRack()
     {
+        Debug.LogWarning("SetupRack() called!");
+
         clueWord = wordManager.targetClueWord;
 
         if (string.IsNullOrEmpty(clueWord))
@@ -118,14 +122,43 @@ public class LetterRack : MonoBehaviour
         }
     }
 
+    public void SetupTutorialRack()
+    {
+        clueWord = "SIT"; // ✅ Hardcoded
+
+        ClearRack(); // Clear any existing slots
+
+        for (int i = 0; i < clueWord.Length; i++)
+        {
+            var slot = Instantiate(slotTemplate, slotContainer);
+            slot.gameObject.SetActive(true);
+
+            var text = slot.GetComponentInChildren<TextMeshProUGUI>();
+            slots.Add(new Slot(text));
+
+            int slotIndex = i;
+            var button = slot.gameObject.AddComponent<UnityEngine.UI.Button>();
+            button.onClick.AddListener(() => PopLetter(slotIndex));
+
+            var drag = slot.gameObject.AddComponent<DraggableSlot>();
+            drag.slotIndex = slotIndex;
+            drag.rack = this;
+        }
+
+        clueSolved = false;
+        successPopup.SetActive(false);
+
+        Debug.Log("TUTORIAL: Created rack for SIT with " + clueWord.Length + " slots");
+    }
+
+
     private void CheckWord()
     {
         if (clueSolved) return;
 
         foreach (var slot in slots)
         {
-            if (slot.Letter == '\0')
-                return;
+            if (slot.Letter == '\0') return; // Not all filled
         }
 
         string constructedWord = "";
@@ -134,12 +167,22 @@ public class LetterRack : MonoBehaviour
             constructedWord += slot.Letter;
         }
 
-        if (constructedWord.ToUpper() == clueWord.ToUpper())
+        if (constructedWord.ToUpper() == "SIT")
         {
             clueSolved = true;
-            StartCoroutine(ShowPopup(successPopup));
+
+            // For tutorial, show final popup
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.ShowFinalTutorialPopup();
+            }
+            else
+            {
+                StartCoroutine(ShowPopup(successPopup));
+            }
         }
     }
+
 
     private IEnumerator ShowPopup(GameObject popup)
     {
@@ -152,6 +195,7 @@ public class LetterRack : MonoBehaviour
     {
         successPopup.SetActive(false);
     }
+    
 
     private class Slot
     {
@@ -193,7 +237,10 @@ public class LetterRack : MonoBehaviour
         public void DestroyUI()
         {
             if (label != null)
-                GameObject.Destroy(label.transform.parent.gameObject);
+                GameObject.Destroy(label.transform.parent.gameObject); // Destroys the whole slot
         }
+
+
+        
     }
 }

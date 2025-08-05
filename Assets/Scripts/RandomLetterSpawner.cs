@@ -41,29 +41,39 @@ public class RandomLetterSpawner : MonoBehaviour
 
     public void SpawnCluesForTutorial()
     {
-        validSpawnPoints.Clear();
-        GenerateValidSpawnPoints();  // Uses default groundTilemap
-        string tutorialWord = "HELPZIK";
-        List<char> lettersToSpawn = new List<char>(tutorialWord);
+        validSpawnPoints.Clear();  // Not needed, but just to keep structure
 
-        // Spawn each letter at a valid location
-        for (int i = 0; i < lettersToSpawn.Count; i++)
+        string tutorialWord = "SMTIW";
+        List<Vector3> fixedPositions = new List<Vector3>
+    {
+        new Vector3(-13f, -4f, -1f),  
+        new Vector3(-13f, -2f, -1f),  
+        new Vector3(-13f, -1f, -1f),  
+        new Vector3(-13f, 0f, -1f),   
+        new Vector3(-13f, 1f, -1f),   
+    };
+
+        for (int i = 0; i < tutorialWord.Length; i++)
         {
-            if (validSpawnPoints.Count == 0)
-            {
-                Debug.LogWarning("Ran out of spawn points for tutorial!");
-                break;
-            }
-
-            int spawnIndex = Random.Range(0, validSpawnPoints.Count);
-            Vector3 spawnPos = validSpawnPoints[spawnIndex];
-            validSpawnPoints.RemoveAt(spawnIndex);
-
-            spawnPos.z = -1f;
             GameObject letterObj = Instantiate(letterPrefab, letterParent);
-            letterObj.transform.position = spawnPos;
-            letterObj.GetComponent<Letter>().SetLetter(lettersToSpawn[i]);
+            letterObj.transform.position = fixedPositions[i];
+            letterObj.GetComponent<Letter>().SetLetter(tutorialWord[i]);
         }
+
+        // Optional: Add bogus letters at random valid locations
+        GenerateValidSpawnPoints();
+        for (int i = 0; i < 3; i++) // 3 bogus letters
+        {
+            if (validSpawnPoints.Count == 0) break;
+            int index = Random.Range(0, validSpawnPoints.Count);
+            Vector3 pos = validSpawnPoints[index];
+            validSpawnPoints.RemoveAt(index);
+
+            GameObject bogusLetter = Instantiate(letterPrefab, letterParent);
+            bogusLetter.transform.position = pos;
+            bogusLetter.GetComponent<Letter>().SetLetter(alphabet[Random.Range(0, alphabet.Length)]);
+        }
+    
     }
 
     public void SpawnCluesForLevel1()
