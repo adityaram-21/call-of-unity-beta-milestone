@@ -122,18 +122,18 @@ public class LetterRack : MonoBehaviour
         }
     }
 
-    public void SetupTutorialRack()
+    public void SetupTutorialRack(string word)
     {
-        clueWord = "SIT"; // ✅ Hardcoded
+        clueWord = word.ToUpper();
 
-        ClearRack(); // Clear any existing slots
+        ClearRack();
 
         for (int i = 0; i < clueWord.Length; i++)
         {
             var slot = Instantiate(slotTemplate, slotContainer);
             slot.gameObject.SetActive(true);
 
-            var text = slot.GetComponentInChildren<TextMeshProUGUI>();
+            var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
             slots.Add(new Slot(text));
 
             int slotIndex = i;
@@ -147,8 +147,6 @@ public class LetterRack : MonoBehaviour
 
         clueSolved = false;
         successPopup.SetActive(false);
-
-        Debug.Log("TUTORIAL: Created rack for SIT with " + clueWord.Length + " slots");
     }
 
 
