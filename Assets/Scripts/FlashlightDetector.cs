@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Collections;
 
+
 public class FlashlightDetector : MonoBehaviour
 {
     [Header("Light Angles")]
