@@ -12,6 +12,7 @@ TagManager:
   - Drawer
   - Desk
   - Clock
+  - Chair
   layers:
   - Default
   - TransparentFX

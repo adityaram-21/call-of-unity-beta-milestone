@@ -49,8 +49,9 @@ public class GameManager : MonoBehaviour
     private bool movementDone = false;
 
     public static GameManager Instance;
-
+    private RandomLetterSpawner randomLetterSpawner;
     public GameObject finalTutorialPopup;
+    private bool firstLetterSpawned = false;
 
     void Awake()
     {
@@ -74,6 +75,8 @@ public class GameManager : MonoBehaviour
         pauseButton.onClick.AddListener(PauseGame);
         resumeButton.onClick.AddListener(ResumeGame);
         restartButton.onClick.AddListener(RestartGame);
+
+        randomLetterSpawner = FindObjectOfType<RandomLetterSpawner>();
     }
 
     void StartTutorial()
@@ -160,12 +163,14 @@ public class GameManager : MonoBehaviour
         else if (pickingPanelS != null && pickingPanelS.activeSelf && Input.GetMouseButtonDown(0))
         {
             pickingPanelS.SetActive(false);
+            randomLetterSpawner.SpawnLettersForClue(true, "T");
             pickingPanelT.SetActive(true);
             Debug.Log("Moved to PickingT Tutorial Panel");
         }
         else if (pickingPanelT != null && pickingPanelT.activeSelf && Input.GetMouseButtonDown(0))
         {
             pickingPanelT.SetActive(false);
+            randomLetterSpawner.SpawnLettersForClue(true, "I");
             pickingPanelI.SetActive(true);
             Debug.Log("Moved to PickingI Tutorial Panel");
         }
@@ -195,6 +200,11 @@ public class GameManager : MonoBehaviour
     void ShowPickingPanel()
     {
         mappingPanel?.SetActive(false);
+        if (!firstLetterSpawned)
+        {
+            randomLetterSpawner.SpawnLettersForClue(true, "S");
+            firstLetterSpawned = true;
+        }
         pickingPanelS?.SetActive(true);
         Debug.Log("Moved to PickingS Tutorial Panel");
     }
@@ -291,7 +301,6 @@ public class GameManager : MonoBehaviour
 
     public void LoadLevel(int level)
     {
-        RandomLetterSpawner spawner = FindObjectOfType<RandomLetterSpawner>();
         LetterRack letterRack = FindObjectOfType<LetterRack>();
         MinimapCameraController minimapCameraController = FindObjectOfType<MinimapCameraController>();
 
@@ -303,7 +312,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (spawner != null && letterRack != null)
+        if (randomLetterSpawner != null && letterRack != null)
         {
             currentLevel = level;
             if (gamePanel != null && !gamePanel.activeSelf)
@@ -320,25 +329,23 @@ public class GameManager : MonoBehaviour
 
             if (level == 0)
             {
-                spawner.SpawnCluesForTutorial();
+                randomLetterSpawner.SpawnCluesForTutorial();
+                minimapCameraController.PositionAndSizeCamera(0);
             }
             else if (level == 1)
             {
-                spawner.SpawnCluesForLevel1();
+                randomLetterSpawner.SpawnCluesForLevel1();
                 minimapCameraController.PositionAndSizeCamera(1);
             }
             else if (level == 2)
             {
-                spawner.SpawnCluesForLevel2();
+                randomLetterSpawner.SpawnCluesForLevel2();
                 minimapCameraController.PositionAndSizeCamera(2);
             }
-
 
             Debug.Log($"Loading clues for level {level}...");
             letterRack.ClearRack();
             letterRack.SetupRack();
-
-
 
             PlayerController playerController = FindObjectOfType<PlayerController>();
             if (playerController != null)
@@ -353,23 +360,5 @@ public class GameManager : MonoBehaviour
         Debug.Log("Restarting game...");
         Time.timeScale = 0f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        
-        //currentLevel = 1;
-        //PlayerController playerController = FindObjectOfType<PlayerController>();
-        //if (playerController != null)
-        //{
-        //    playerController.ToggleFlashlight();
-        //    playerController.SetMaxBatteryLife();
-        //}
-
-        //gamePanel.SetActive(false);
-        //pausePanel.SetActive(false);
-        //losePopup.SetActive(false);
-        //winPopup.SetActive(false);
-        //startPanel.SetActive(true);
-
-        //pauseButton.gameObject.SetActive(false);
-        //restartButton.gameObject.SetActive(false);
-        
     }
 }

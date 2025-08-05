@@ -36,7 +36,7 @@ public class ObjectClickChecker : MonoBehaviour
             return;
         }
 
-        if (clueManager == null || string.IsNullOrEmpty(clueManager.targetObjectName))
+        if ((clueManager == null || string.IsNullOrEmpty(clueManager.targetObjectName)) && gameManager.currentLevel > 0)
         {
             Debug.LogWarning("ClueManager or target object not set.");
             return;
@@ -51,18 +51,23 @@ public class ObjectClickChecker : MonoBehaviour
         {
             Debug.Log("Correct object clicked! You win.");
             TimerController timerController = FindObjectOfType<TimerController>();
-            if (gameManager != null && gameManager.currentLevel == 1)
+
+            if (gameManager != null && gameManager.currentLevel == 0)
             {
-                timeTakenLevel1 = (int)(300f - timerController.timeRemaining);
+                gameManager.GameOver("Congratulations! Tutorial completed!!");
+            }
+            else if (gameManager != null && gameManager.currentLevel == 1)
+            {
+                timeTakenLevel1 = (int)(180f - timerController.timeRemaining);
                 GoogleSheetLogger.LogEvent("Level 1 Completed", $"{timeTakenLevel1}");
+                StartCoroutine(HandleWin());
             }
-            else
-            if (gameManager != null && gameManager.currentLevel == 2)
+            else if (gameManager != null && gameManager.currentLevel == 2)
             {
-                timeTakenLevel2 = (int)(300f - timerController.timeRemaining - timeTakenLevel1);
+                timeTakenLevel2 = (int)(300f - timerController.timeRemaining);
                 GoogleSheetLogger.LogEvent("Level 2 Completed", $"{timeTakenLevel2}");
+                StartCoroutine(HandleWin());
             }
-            StartCoroutine(HandleWin());
         }
         else
         {

@@ -8,7 +8,7 @@ public class Letter : MonoBehaviour
     private Vector3 originalPosition;
     public bool isCollected = false;
 
-    [SerializeField] private float collectRange = 3f; // Max click distance
+    [SerializeField] private float collectRange = 10f; // Max click distance
 
     private void Start()
     {

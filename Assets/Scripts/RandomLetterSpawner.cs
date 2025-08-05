@@ -39,36 +39,30 @@ public class RandomLetterSpawner : MonoBehaviour
             Debug.LogError("Missing references on GridLetterSpawner!");
             return;
         }
-    }
-
-    public void SpawnCluesForTutorial()
-    {
-        validSpawnPoints.Clear();  // Not needed, but just to keep structure
-
-        wordDictionaryManager.SelectTutorialClue("SIT");
 
         fixedPositions.Add(new Vector3(-13f, -2f, -1f));
         fixedPositions.Add(new Vector3(-13f, -1f, -1f));
         fixedPositions.Add(new Vector3(-13f, 0f, -1f));
-    
+    }
 
-        SpawnLettersForClue(true);
-
-
+    public void SpawnCluesForTutorial()
+    {
+        validSpawnPoints.Clear();
+        wordDictionaryManager.SelectTutorialClue("SIT", "CHAIR");
     }
 
     public void SpawnCluesForLevel1()
     {
         GenerateValidSpawnPoints();
         wordDictionaryManager.SelectRandomClue();  // Pick a clue for level 1
-        SpawnLettersForClue(false);
+        SpawnLettersForClue(false, wordDictionaryManager.targetClueWord);
     }
 
     public void SpawnCluesForLevel2()
     {
         GenerateValidSpawnPoints(groundTilemapKitchen);
         wordDictionaryManager.SelectRandomClue();  // Pick a clue for level 2
-        SpawnLettersForClue(false);
+        SpawnLettersForClue(false, wordDictionaryManager.targetClueWord);
     }
 
     void GenerateValidSpawnPoints(Tilemap tilemap = null)
@@ -104,17 +98,17 @@ public class RandomLetterSpawner : MonoBehaviour
         }
     }
 
-    void SpawnLettersForClue(bool isTutorial)
+    public void SpawnLettersForClue(bool isTutorial, string clue)
     {
         List<char> lettersToSpawn = new List<char>();
 
-        string clue = wordDictionaryManager.targetClueWord;
         if (string.IsNullOrEmpty(clue))
         {
             Debug.LogWarning("No clue word selected in WordDictionaryManager!");
             return;
         }
 
+        Debug.Log(clue);
         // Add the clue letters
         foreach (char c in clue)
         {

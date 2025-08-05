@@ -7,6 +7,7 @@ public class MinimapCameraController : MonoBehaviour
     [Header("Tilemap and Grid")]
     public Tilemap groundTilemapBedroom;
     public Tilemap groundTilemapKitchen;
+    public Tilemap groundTutorial;
     public Grid grid;
 
     [Header("Minimap Camera Settings")]
@@ -28,7 +29,24 @@ public class MinimapCameraController : MonoBehaviour
 
     public void PositionAndSizeCamera(int level)
     {
-        Tilemap groundTilemap = (level == 1) ? groundTilemapBedroom : groundTilemapKitchen;
+        Tilemap groundTilemap;
+        switch (level)
+        {
+            case 0:
+                groundTilemap = groundTutorial;
+                break;
+            case 1:
+                groundTilemap = groundTilemapBedroom;
+                break;
+            case 2:
+                groundTilemap = groundTilemapKitchen;
+                break;
+            default:
+                Debug.LogWarning("Unexpected level index: " + level + ". Defaulting to Bedroom tilemap.");
+                groundTilemap = groundTilemapBedroom;
+                break;
+        }
+
         BoundsInt bounds = groundTilemap.cellBounds;
 
         Vector3Int bottomLeft = new Vector3Int(bounds.xMin, bounds.yMin - 1, 0);

@@ -116,8 +116,9 @@ public class WordDictionaryManager : MonoBehaviour
         // Check if the player's word matches the target clue word
         return playerWord.ToUpper() == targetClueWord;
     }
-    public void SelectTutorialClue(string clue)
+    public void SelectTutorialClue(string clue, string objectName)
     {
+        targetObjectName = objectName;
         targetClueWord = clue;  
     }
 
