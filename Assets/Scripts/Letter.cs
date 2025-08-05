@@ -7,6 +7,7 @@ public class Letter : MonoBehaviour
 
     private Vector3 originalPosition;
     public bool isCollected = false;
+    private LetterAccuracyTracker accuracyTracker;
 
     [SerializeField] private float collectRange = 10f; // Max click distance
 
@@ -14,6 +15,7 @@ public class Letter : MonoBehaviour
     {
         originalPosition = transform.position;
         UpdateDisplay();
+        accuracyTracker = FindObjectOfType<LetterAccuracyTracker>();
     }
 
     public void SetLetter(char c)
@@ -41,6 +43,13 @@ public class Letter : MonoBehaviour
             LetterRack rack = FindObjectOfType<LetterRack>();
             if (rack != null && rack.AddCollectedLetter(letterValue, this))
             {
+                if (accuracyTracker != null)
+                {
+                    if (rack.IsCorrectLetter(letterValue))  // Ensure IsCorrectLetter exists in LetterRack
+                        accuracyTracker.AddCorrect();
+                    else
+                        accuracyTracker.AddIncorrect();
+                }
                 Collect();
             }
         }

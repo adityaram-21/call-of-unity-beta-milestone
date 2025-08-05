@@ -283,6 +283,14 @@ public class GameManager : MonoBehaviour
     public void GameOver(string message)
     {
         Debug.Log(message);
+        FindObjectOfType<LetterAccuracyTracker>()?.LogLetterAccuracy($"Level {currentLevel} - Failed");
+
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player != null)
+        {
+            GoogleSheetLogger.LogEvent("TorchSwitchOffs", $"Level {currentLevel} - Failed,{player.GetLowBatterySwitchOffCount()}");
+        }
+
         if (losePopup != null)
         {
             TMP_Text loseText = losePopup.GetComponentInChildren<TMP_Text>();

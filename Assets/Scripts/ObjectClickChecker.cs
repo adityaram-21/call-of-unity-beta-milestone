@@ -66,6 +66,14 @@ public class ObjectClickChecker : MonoBehaviour
             {
                 timeTakenLevel2 = (int)(300f - timerController.timeRemaining);
                 GoogleSheetLogger.LogEvent("Level 2 Completed", $"{timeTakenLevel2}");
+                FindObjectOfType<LetterAccuracyTracker>()?.LogLetterAccuracy($"Level {gameManager.currentLevel}");
+
+                PlayerController player = FindObjectOfType<PlayerController>();
+                if (player != null)
+                {
+                    GoogleSheetLogger.LogEvent("TorchSwitchOffs", $"Level {gameManager.currentLevel},{player.GetLowBatterySwitchOffCount()}");
+                }
+
                 StartCoroutine(HandleWin());
             }
         }

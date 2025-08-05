@@ -24,6 +24,8 @@ public class PlayerController : MonoBehaviour
     public float batteryDrainRate = 1.5f; // Battery drain rate per second when flashlight is on
     public float batteryRechargeRate = 3f; // Battery recharge rate per second when flashlight is off
     private float currentBatteryLife;
+    private int lowBatterySwitchOffCount = 0;
+    public int GetLowBatterySwitchOffCount() => lowBatterySwitchOffCount;
 
     [Header("Battery Display")]
     public RectTransform fillBar; // Assign the Fill image's RectTransform
@@ -62,6 +64,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void HandleFlashlightToggle()
+    {
+        bool wasOn = flashlightOn;
+        ToggleFlashlight();
+
+        float batteryPercent = currentBatteryLife / batteryLife;
+        if (wasOn && !flashlightOn && batteryPercent <= 0.1f)
+        {
+            lowBatterySwitchOffCount++;
+            Debug.Log("Torch manually turned off below 10% battery. Count: " + lowBatterySwitchOffCount);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -80,7 +95,7 @@ public class PlayerController : MonoBehaviour
         // Flashlight Switch
         if (Time.timeScale > 0 && (Input.GetMouseButtonDown(1) || Input.GetKeyDown(KeyCode.Space))) // Right click or Space to toggle flashlight
         {
-            ToggleFlashlight();
+            HandleFlashlightToggle();
         }
 
         // interaction click, left click

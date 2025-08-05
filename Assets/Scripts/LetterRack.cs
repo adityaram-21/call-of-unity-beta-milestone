@@ -197,6 +197,10 @@ public class LetterRack : MonoBehaviour
         successPopup.SetActive(false);
     }
     
+    public bool IsCorrectLetter(char c)
+    {
+        return clueWord.ToUpper().Contains(c.ToString().ToUpper());
+    }
 
     private class Slot
     {
@@ -209,6 +213,7 @@ public class LetterRack : MonoBehaviour
             label = l;
             Clear();
         }
+
 
         public void Set(char c, Letter source = null)
         {
@@ -242,6 +247,6 @@ public class LetterRack : MonoBehaviour
         }
 
 
-        
+
     }
 }
