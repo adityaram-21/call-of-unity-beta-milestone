@@ -13,6 +13,10 @@ public class LetterRack : MonoBehaviour
     public WordDictionaryManager wordManager;
     private string clueWord;
     public static bool clueSolved = false;
+    private TimerController timerController;
+    private float startTime = 0;
+    private bool firstLetter = true;
+    private GoogleFormAnalytics googleFormAnalytics;
 
     private void Start()
     {
@@ -28,6 +32,16 @@ public class LetterRack : MonoBehaviour
                 Debug.LogError("WordDictionaryManager not found in scene!");
                 return;
             }
+        }
+
+        if (timerController == null)
+        {
+            timerController = FindObjectOfType<TimerController>();
+        }
+
+        if (googleFormAnalytics == null)
+        {
+            googleFormAnalytics = FindObjectOfType<GoogleFormAnalytics>();
         }
     }
 
@@ -87,6 +101,12 @@ public class LetterRack : MonoBehaviour
         {
             if (slots[i].Letter == '\0')
             {
+                if (i == 0 && firstLetter)
+                {
+                    startTime = timerController.timeRemaining;
+                    Debug.Log($"First letter collected at {startTime}");
+                    firstLetter = false;
+                }
                 slots[i].Set(c, source);
                 CheckWord();
                 return true;
@@ -122,34 +142,6 @@ public class LetterRack : MonoBehaviour
         }
     }
 
-    // public void SetupTutorialRack(string word)
-    // {
-    //     clueWord = word.ToUpper();
-
-    //     ClearRack();
-
-    //     for (int i = 0; i < clueWord.Length; i++)
-    //     {
-    //         var slot = Instantiate(slotTemplate, slotContainer);
-    //         slot.gameObject.SetActive(true);
-
-    //         var text = slot.GetComponentInChildren<TMPro.TextMeshProUGUI>();
-    //         slots.Add(new Slot(text));
-
-    //         int slotIndex = i;
-    //         var button = slot.gameObject.AddComponent<UnityEngine.UI.Button>();
-    //         button.onClick.AddListener(() => PopLetter(slotIndex));
-
-    //         var drag = slot.gameObject.AddComponent<DraggableSlot>();
-    //         drag.slotIndex = slotIndex;
-    //         drag.rack = this;
-    //     }
-
-    //     clueSolved = false;
-    //     successPopup.SetActive(false);
-    // }
-
-
     private void CheckWord()
     {
         if (clueSolved) return;
@@ -177,10 +169,11 @@ public class LetterRack : MonoBehaviour
             }
             else
             {
+                float totalTime = timerController.timeRemaining - startTime;
+                googleFormAnalytics.LogEvent("Time-per-letter", $"{(int)totalTime},{slots.Count - 1}");
+                
                 StartCoroutine(ShowPopup(successPopup));
-                
-            }
-                
+            }      
         }
     }
 
@@ -245,8 +238,5 @@ public class LetterRack : MonoBehaviour
             if (label != null)
                 GameObject.Destroy(label.transform.parent.gameObject); // Destroys the whole slot
         }
-
-
-
     }
 }

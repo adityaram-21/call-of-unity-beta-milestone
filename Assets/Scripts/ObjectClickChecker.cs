@@ -10,6 +10,7 @@ public class ObjectClickChecker : MonoBehaviour
 
     private WordDictionaryManager clueManager;
     private GameManager gameManager;
+    private GoogleFormAnalytics googleFormAnalytics;
     private int timeTakenLevel1 = 0;
     private int timeTakenLevel2 = 0;
 
@@ -17,6 +18,7 @@ public class ObjectClickChecker : MonoBehaviour
     {
         clueManager = FindObjectOfType<WordDictionaryManager>();
         gameManager = FindObjectOfType<GameManager>();
+        googleFormAnalytics = FindObjectOfType<GoogleFormAnalytics>();
 
         if (clueManager == null || gameManager == null)
         {
@@ -59,13 +61,14 @@ public class ObjectClickChecker : MonoBehaviour
             else if (gameManager != null && gameManager.currentLevel == 1)
             {
                 timeTakenLevel1 = (int)(180f - timerController.timeRemaining);
-                GoogleSheetLogger.LogEvent("Level 1 Completed", $"{timeTakenLevel1}");
-                FindObjectOfType<LetterAccuracyTracker>()?.LogLetterAccuracy($"Level {gameManager.currentLevel}");
+                googleFormAnalytics.LogEvent("Level 1 Completed", $"{timeTakenLevel1}");
+                gameManager.letterAccuracyTracker.LogLetterAccuracy($"Level {gameManager.currentLevel}");
+
 
                 PlayerController player = FindObjectOfType<PlayerController>();
                 if (player != null)
                 {
-                    GoogleSheetLogger.LogEvent("TorchSwitchOffs", $"Level {gameManager.currentLevel},{player.GetLowBatterySwitchOffCount()}");
+                    googleFormAnalytics.LogEvent("TorchSwitchOffs", $"Level {gameManager.currentLevel},{player.GetLowBatterySwitchOffCount()}");
                 }
                 
                 StartCoroutine(HandleWin());
@@ -73,13 +76,13 @@ public class ObjectClickChecker : MonoBehaviour
             else if (gameManager != null && gameManager.currentLevel == 2)
             {
                 timeTakenLevel2 = (int)(300f - timerController.timeRemaining);
-                GoogleSheetLogger.LogEvent("Level 2 Completed", $"{timeTakenLevel2}");
-                FindObjectOfType<LetterAccuracyTracker>()?.LogLetterAccuracy($"Level {gameManager.currentLevel}");
+                googleFormAnalytics.LogEvent("Level 2 Completed", $"{timeTakenLevel2}");
+                gameManager.letterAccuracyTracker.LogLetterAccuracy($"Level {gameManager.currentLevel}");
 
                 PlayerController player = FindObjectOfType<PlayerController>();
                 if (player != null)
                 {
-                    GoogleSheetLogger.LogEvent("TorchSwitchOffs", $"Level {gameManager.currentLevel},{player.GetLowBatterySwitchOffCount()}");
+                    googleFormAnalytics.LogEvent("TorchSwitchOffs", $"Level {gameManager.currentLevel},{player.GetLowBatterySwitchOffCount()}");
                 }
 
                 StartCoroutine(HandleWin());

@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
 
     public static GameManager Instance;
     private RandomLetterSpawner randomLetterSpawner;
+    public LetterAccuracyTracker letterAccuracyTracker;
     public GameObject finalTutorialPopup;
     private bool firstLetterSpawned = false;
 
@@ -77,6 +78,7 @@ public class GameManager : MonoBehaviour
         restartButton.onClick.AddListener(RestartGame);
 
         randomLetterSpawner = FindObjectOfType<RandomLetterSpawner>();
+        letterAccuracyTracker = FindObjectOfType<LetterAccuracyTracker>();
     }
 
     void StartTutorial()
@@ -105,6 +107,8 @@ public class GameManager : MonoBehaviour
         startPanel.SetActive(false);
         gamePanel.SetActive(false);
         pausePanel.SetActive(false);
+        pauseButton.gameObject.SetActive(true);
+        restartButton.gameObject.SetActive(true);
 
         LoadLevel(0);
     }
@@ -283,12 +287,14 @@ public class GameManager : MonoBehaviour
     public void GameOver(string message)
     {
         Debug.Log(message);
-        FindObjectOfType<LetterAccuracyTracker>()?.LogLetterAccuracy($"Level {currentLevel} - Failed");
+        GoogleFormAnalytics googleFormAnalytics = FindObjectOfType<GoogleFormAnalytics>();
 
         PlayerController player = FindObjectOfType<PlayerController>();
-        if (player != null)
+        if (player != null && currentLevel > 0)
         {
-            GoogleSheetLogger.LogEvent("TorchSwitchOffs", $"Level {currentLevel} - Failed,{player.GetLowBatterySwitchOffCount()}");
+            letterAccuracyTracker.LogLetterAccuracy($"Level {currentLevel} - Failed");
+            googleFormAnalytics.LogEvent("TorchSwitchOffs", $"Level {currentLevel} - Failed,{player.GetLowBatterySwitchOffCount()}");
+            Debug.Log($"Level {currentLevel} - Failed,{player.GetLowBatterySwitchOffCount()}");
         }
 
         if (losePopup != null)
