@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour
     public LetterAccuracyTracker letterAccuracyTracker;
     public GameObject finalTutorialPopup;
     private bool firstLetterSpawned = false;
+    private bool isGameOver = false;
 
     void Awake()
     {
@@ -83,6 +84,7 @@ public class GameManager : MonoBehaviour
 
     void StartTutorial()
     {
+        isGameOver = false;
         Debug.Log("Tutorial Button Clicked!");
         currentLevel = 0;
         Time.timeScale = 1f;
@@ -115,6 +117,7 @@ public class GameManager : MonoBehaviour
 
     void StartGame()
     {
+        isGameOver = false;
         Debug.Log("Loading level 1...");
         Vector3 playerStartPosition = new Vector3(-7.5f, 4f, 0f);
         GameObject player = GameObject.FindWithTag("Player");
@@ -233,6 +236,7 @@ public class GameManager : MonoBehaviour
 
     void LoadLevel2()
     {
+        isGameOver = false;
         Debug.Log("Loading level 2...");
         Vector3 playerStartPosition = doorToRemove.transform.position;
         GameObject player = GameObject.FindWithTag("Player");
@@ -290,11 +294,12 @@ public class GameManager : MonoBehaviour
         GoogleFormAnalytics googleFormAnalytics = FindObjectOfType<GoogleFormAnalytics>();
 
         PlayerController player = FindObjectOfType<PlayerController>();
-        if (player != null && currentLevel > 0)
+        if (player != null && currentLevel > 0 && !isGameOver)
         {
             letterAccuracyTracker.LogLetterAccuracy($"Level {currentLevel} - Failed");
             googleFormAnalytics.LogEvent("TorchSwitchOffs", $"Level {currentLevel} - Failed,{player.GetLowBatterySwitchOffCount()}");
             Debug.Log($"Level {currentLevel} - Failed,{player.GetLowBatterySwitchOffCount()}");
+            isGameOver = true;
         }
 
         if (losePopup != null)
