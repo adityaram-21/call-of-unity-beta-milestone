@@ -16,7 +16,6 @@ public class PlayerController : MonoBehaviour
     [Header("Flashlight")]
     public GameObject flashlight;
     private bool flashlightOn = false;
-    // distance check, use for interaction
     public float maxInteractDistance = 3f;
 
     [Header("Battery Settings")]
@@ -28,10 +27,16 @@ public class PlayerController : MonoBehaviour
     public int GetLowBatterySwitchOffCount() => lowBatterySwitchOffCount;
 
     [Header("Battery Display")]
-    public RectTransform fillBar; // Assign the Fill image's RectTransform
-    public Image fillImage;       // The Fill Image (for color change)
+    public RectTransform fillBar;
+    public Image fillImage;
     public float maxWidth = 200f;
-    public TMP_Text batteryText; // Text to display battery percentage
+    public TMP_Text batteryText;
+
+    [Header("Blinking Effect")]
+    private float blinkTimer = 0f;
+    public float blinkInterval = 0.5f;
+    private bool isBlinkingVisible = true;
+    public TextMeshProUGUI lowBatteryText;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -147,6 +152,28 @@ public class PlayerController : MonoBehaviour
                 currentBatteryLife += batteryRechargeRate * Time.deltaTime;
                 currentBatteryLife = Mathf.Clamp(currentBatteryLife, 0f, batteryLife);
             }
+        }
+
+        float batteryPercent = currentBatteryLife / batteryLife;
+        if (batteryPercent <= 0.1f && flashlightOn)
+        {
+            // Flashlight is on and battery is low, start blinking
+            blinkTimer += Time.deltaTime;
+            if (blinkTimer >= blinkInterval)
+            {
+                isBlinkingVisible = !isBlinkingVisible;
+                blinkTimer = 0f;
+            }
+            fillImage.enabled = isBlinkingVisible;
+            batteryText.enabled = isBlinkingVisible;
+            lowBatteryText.text = "FLASHLIGHT LOW BATTERY!";
+            lowBatteryText.enabled = isBlinkingVisible;
+        }
+        else
+        {
+            fillImage.enabled = true;
+            batteryText.enabled = true;
+            lowBatteryText.enabled = false;
         }
 
         // Update battery display
